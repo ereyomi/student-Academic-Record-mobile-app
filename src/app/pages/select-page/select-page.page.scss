@@ -1,0 +1,93 @@
+.select-header {
+    /* padding: 10px; */
+    position: relative;
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+    z-index: 1;
+    /* border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px; */
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    background: #ffd948;
+    /* box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); */
+    /* -webkit-box-shadow: 0 10px 6px -6px #777;
+       -moz-box-shadow: 0 10px 6px -6px #777;
+            box-shadow: 0 10px 6px -6px #777;
+            background: rgb(247, 247, 243); */
+}
+.select-header img {
+    position: absolute;
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    object-position: top right;
+    z-index: 2;
+}
+.select-header ion-toolbar {
+    position: absolute; 
+    padding: 10px;
+    z-index: 3;
+    --background: none;
+}
+.select-header .custom-toolbar {
+    position: absolute; 
+    padding: 10px;
+    z-index: 3;
+    left: 0;
+    --background: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.select-header .custom-title-card {   
+    background: none;
+    color: black;
+    box-shadow: none;
+    text-align: left;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 10px;
+}
+.select-header .custom-title-card p {
+    padding: 0;
+    margin: 0;
+}
+.select-header .custom-title-card p:first-child {
+    font-size: 2rem;
+    font-weight: bold;
+}
+.select-header ion-card ion-card-title {
+    color: black;
+}
+/* custo-body */
+
+.custom-body {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.custom-sm {
+    width: 80%;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+.custom-items {
+    border-radius: 10px;
+}
+
+.custom-body {
+    padding:  30px;
+}
+
+.custom-items ion-button {
+    width: 100%;
+}

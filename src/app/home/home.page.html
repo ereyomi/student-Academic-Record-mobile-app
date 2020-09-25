@@ -1,20 +1,96 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
+<ion-header class="ion-no-border myHeader">
+    <ion-toolbar class="intro">
+        <ion-title size="small" class="sm-title" color="primary">
+            Hello,
+        </ion-title>
+        <ion-title size="large" color="primary">
+            Ereyomi
+        </ion-title>
+        <ion-buttons slot="end">
+            <ion-button color="primary">
+                <ion-icon name="search-outline"></ion-icon>
+            </ion-button>
+            <ion-button color="primary">
+                <!-- <ion-icon name="reorder-three-outline"></ion-icon> -->
+                <!-- four -->
+                <ion-icon name="menu"></ion-icon>
+            </ion-button>
+        </ion-buttons>
     </ion-toolbar>
-  </ion-header>
-
+</ion-header>
+<ion-content>  
+  <div class="your-class">
+    <ion-item lines="none">
+        <ion-label>Your Class: </ion-label>
+        <ion-chip>
+            <ion-icon name="person-outline" color="primary"></ion-icon>
+            <ion-label color="primary">JSS 1</ion-label>
+        </ion-chip>
+    </ion-item>
+  </div>
+  
   <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+    <ion-grid>
+        <ion-row>
+            <ion-col>
+                <ion-card (click)="loadSelectForExam()">
+                    <ion-card-header>
+                        <ion-card-title>
+                            <ion-icon name="albums"></ion-icon>
+                            Record
+                        </ion-card-title>
+                    </ion-card-header>
+                    <ion-card-content>
+                         Exam score
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+            <ion-col>
+                <ion-card>
+                    <ion-card-header>
+                        <ion-card-title>
+                            <ion-icon name="book"></ion-icon>
+                            Record
+                        </ion-card-title>
+                    </ion-card-header>
+                    <ion-card-content>
+                        C.A score
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col>
+                <ion-card>
+                    <ion-card-header>
+                        <ion-card-title color="secondary">
+                            <ion-icon name="create"></ion-icon>
+                            View Student
+                        </ion-card-title>
+                    </ion-card-header>
+                    <ion-card-content>
+                         term result
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <ion-card>
+                    <ion-card-header>
+                        <ion-card-title color="warning">
+                            <ion-icon name="book"></ion-icon>
+                            Student 
+                        </ion-card-title>
+                    </ion-card-header>
+                    <ion-card-content>
+                        term cummulative Result
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+
+    </ion-grid>
   </div>
 </ion-content>

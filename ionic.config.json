@@ -1,5 +1,8 @@
 {
   "name": "studentAcademicRecord",
-  "integrations": {},
+  "integrations": {
+    "cordova": {},
+    "capacitor": {}
+  },
   "type": "angular"
 }

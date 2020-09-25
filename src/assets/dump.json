@@ -1,0 +1,162 @@
+[
+    {
+        "objectStoreName": "dump",
+        "data": [
+            {
+                "dump_id": "dump_version_1",
+                "status": true
+            }
+        ]
+    },
+    {
+        "objectStoreName": "sessions",
+        "data": [
+            {
+                "session_id": 1,
+                "name": "2019/2020"
+            },
+            {
+                "session_id": 2,
+                "name": "2020/2021"
+            },
+            {
+                "session_id": 3,
+                "name": "2021/2022"
+            }
+        ]
+    },
+    {
+        "objectStoreName": "terms",
+        "data": [
+            {
+                "term_id": 1,
+                "name": "FIRST TERM"
+            },
+            {
+                "term_id": 2,
+                "name": "SECOND TERM"
+            },
+            {
+                "term_id": 3,
+                "name": "THIRD TERM"
+            }
+        ]
+    },
+    {
+        "objectStoreName": "class",
+        "data": [
+            {
+                "class_id": 1,
+                "name": "JSS1A"
+            }
+        ]
+    },
+    {
+        "objectStoreName": "subjects",
+        "data": [
+            {
+                "subject_id": 1,
+                "name": "MATHEMATICS 1",
+                "grade": "JSS1",
+                "term": "FIRST TERM"
+            },
+            {
+                "subject_id": 2,
+                "name": "ENGLISH LANGUAGE 1",
+                "grade": "JSS1",
+                "term": "FIRST TERM"
+            },
+            {
+                "subject_id": 3,
+                "name": "BASIC SCIENCE 1",
+                "grade": "JSS1",
+                "term": "FIRST TERM"
+            }
+        ]
+    },
+    {
+        "objectStoreName": "students",
+        "data": [
+            {
+                "user_id": 1,
+                "class_id": 1,
+                "first_name": "Ereyomi",
+                "last_name": "Samuel",
+                "age": 24,
+                "gender": "male",
+                "address": "Ereyomi has no address",
+                "email": "ereyomioluwaseyi@gmail.com",
+                "admission_year": "2019/2020"
+            },
+            {
+                "user_id": 2,
+                "class_id": 1,
+                "first_name": "Ereyomi",
+                "last_name": "Samuel",
+                "age": 24,
+                "gender": "male",
+                "address": "Ereyomi has no address",
+                "email": "ereyomioluwaseyi@gmail.com",
+                "admission_year": "2019/2020"
+            },
+            {
+                "user_id": 3,
+                "class_id": 1,
+                "first_name": "Another",
+                "last_name": "Student",
+                "age": 20,
+                "gender": "female",
+                "address": "Ereyomi has no address",
+                "email": "ereyomioluwaseyi@gmail.com",
+                "admission_year": "2019/2020"
+            }
+        ]
+    },
+    {
+        "objectStoreName": "academic_report",
+        "data": [
+            {
+                "session_id": 1,
+                "term_id": 1,
+                "class_id": 1,
+                "subject_id": 1,
+                "student_id": 2,
+                "ca_score": 28,
+                "remark": "Keep it up",
+                "offline_status": true,
+                "added_by": 1,
+                "approved_by": 1,
+                "created_at": "nil",
+                "updated_at": "nil"
+            },
+            {
+                "session_id": 1,
+                "term_id": 1,
+                "class_id": 1,
+                "subject_id": 1,
+                "student_id": 1,
+                "ca_score": 28,
+                "remark": "Keep it up",
+                "offline_status": true,
+                "added_by": 1,
+                "approved_by": 1,
+                "created_at": "nil",
+                "updated_at": "nil"
+            },
+            {
+                "session_id": 1,
+                "term_id": 2,
+                "class_id": 1,
+                "subject_id": 1,
+                "student_id": 1,
+                "ca_score": 28,
+                "remark": "Keep it up",
+                "offline_status": true,
+                "added_by": 1,
+                "approved_by": 1,
+                "created_at": "nil",
+                "updated_at": "nil"
+            }
+        ]
+    }
+]

@@ -1,12 +1,46 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { IndexedDbService } from '../services/indexed-db.service';
+import { LoadingController } from '@ionic/angular';
 
-@Component({
-  selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
-})
-export class HomePage {
 
-  constructor() {}
+@Component( {
+    selector: 'app-home',
+    templateUrl: 'home.page.html',
+    styleUrls: [ 'home.page.scss' ],
+} )
+export class HomePage implements OnInit {
+    schoolSessions: any;
+    constructor( private router: Router, private db: IndexedDbService, public loadingController: LoadingController ) { }
+    openDetails( routeTo: string ) {
+        this.router.navigateByUrl( `/select/${ routeTo }` );
+    }
+    ngOnInit() {}
+    async loadSelectForExam() {
+        const loading = await this.loadingController.create( {
+            spinner: 'crescent',
+            // duration: 2000,
+            message: 'Please wait...',
+            translucent: true,
+            cssClass: 'custom-class custom-loading'
+        } );
+        // return await loading.present();
+        await loading.present();
+        this.db.getDatabaseState().subscribe( async ready => {
+            if ( ready ) {
+                console.log( 'db ready: ', ready );
+                const isDump = await this.db.isDump();
+                console.log( 'aw', isDump );
+                if ( isDump === true ) {
+                    this.db.getSessionsTermsAndSubjects();
+                    loading.dismiss();
+                }
+            }
+        } );
 
+        const { role, data } = await loading.onDidDismiss();
+        console.log( 'Loading dismissed with role:', role, data );
+        this.openDetails( 'exam' );
+
+    }
 }

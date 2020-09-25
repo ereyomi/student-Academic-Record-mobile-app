@@ -1,0 +1,28 @@
+<ion-card class="custom-ion-card">
+    <ion-grid>
+        <ion-row class="ion-align-items-center">
+            <ion-col size="7">
+                <ion-item lines="none">
+                    <ion-label>
+                        {{ student.first_name }}
+                    </ion-label>
+                    <ion-label>
+                        {{ student.last_name }}
+                    </ion-label>
+                </ion-item>
+            </ion-col>
+            <ion-col size="5">
+                <ion-input 
+                [ngClass]="{focusIt: focusStatus}"
+                (ionFocus)="onFocusIt()"
+                (ionBlur)="onBlurIt()"
+                class="score-input"
+                placeholder="score" 
+                type="number"
+                inputmode="numeric"
+                debounce="500"
+                (ionChange)="onInputIt($event)"></ion-input>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-card>

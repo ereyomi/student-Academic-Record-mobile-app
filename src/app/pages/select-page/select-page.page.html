@@ -1,0 +1,64 @@
+<ion-header class="ion-no-border">
+    <div class="select-header">
+        
+        <img src="assets/undraw-img/undraw_Analysis_re_w2vd.svg" alt="exam" />
+
+        <div class="custom-toolbar">
+            <ion-buttons slot="start">
+                <ion-back-button color="primary" text="" defaultHref="/home"></ion-back-button>
+            </ion-buttons>
+            
+            <div class="custom-title-card">
+                <p>RECORD</p>
+                <p>EXAM SCORE</p>
+            </div>
+
+        </div> 
+        
+    </div> 
+</ion-header>
+<ion-content>
+        <div class="custom-body">
+            <form class="custom-sm" [formGroup]="selectionForm">
+                <ion-item lines="none" class="custom-items">
+                    <ion-label position="stacked">
+                        SELECT SESSION
+                    </ion-label>
+                    <ion-select 
+                        placeholder="e.g 2018/2019" 
+                        value="" 
+                        formControlName="sessionSelection">
+                        <ion-select-option value="{{session.session_id}}" *ngFor="let session of sessions">{{ session.name }}</ion-select-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item lines="none" class="custom-items">
+                    <ion-label position="stacked">
+                        SELECT TERM
+                    </ion-label>
+                    <ion-select placeholder="e.g FIRST TERM" formControlName="termSelection">
+                        <ion-select-option value="{{term.term_id}}" *ngFor="let term of terms">{{term.name}}</ion-select-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item lines="none" class="custom-items">
+                    <ion-label position="stacked">
+                        SELECT SUBJECT
+                    </ion-label>
+                    <ion-select placeholder="e.g MATH" formControlName="subjectSelection">
+                        <ion-select-option value="{{subject.subject_id}}" *ngFor="let subject of subjects">{{ subject.name }}</ion-select-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item lines="none" class="custom-items">
+
+                    <ion-button 
+                    expand="full" 
+                    size="large" 
+                    shape="round" 
+                    color="tertiary"
+                    (click)="loadSelectForExam()">
+                        continue
+                        <ion-icon slot="end" name="arrow-forward-circle-outline"></ion-icon>
+                    </ion-button>
+                </ion-item>
+            </form>
+        </div> 
+</ion-content>

@@ -1,0 +1,53 @@
+<ion-header class="ion-no-border">
+    <div class="select-header">
+    
+    
+        <img src="assets/undraw-img/undraw_Analysis_re_w2vd.svg" alt="exam" />
+    
+        <div class="custom-toolbar">
+            <ion-buttons slot="start">
+                <ion-back-button color="primary" text="" defaultHref="/select"></ion-back-button>
+            </ion-buttons>
+    
+            <div class="custom-title-card">
+                <p>RECORD</p>
+                <p>EXAM SCORE</p>
+                <ion-label>
+                    <ion-chip>
+                        2018 / 2019
+                    </ion-chip>
+                    <ion-chip>
+                        First Term
+                    </ion-chip>
+                    <ion-chip>
+                        Math
+                    </ion-chip>
+                </ion-label>
+    
+            </div>
+    
+        </div>
+    
+    </div>
+</ion-header>
+
+<ion-content>
+    <div class="custom-body">
+        <form class="custom-sm">
+            <app-score [student]="student" *ngFor="let student of students"></app-score>
+        </form>
+    </div>
+    <ion-fab vertical="bottom" horizontal="end" edge slot="fixed">
+        <ion-fab-button>
+            <ion-icon name="checkmark-done-circle-outline"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+    <ion-toolbar>
+        <ion-title>
+          <!--  <i>typing</i> --> 
+        </ion-title>
+    </ion-toolbar>
+</ion-footer> 
