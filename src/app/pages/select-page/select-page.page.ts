@@ -43,12 +43,13 @@ export class SelectPagePage implements OnInit {
                 const { data } = resolve;
                 const { selections, type } = data;
                 this.selectionType = type;
-                if ( typeof selections === 'undefined' || typeof selections === null || selections.length === 0) {
+                if ( typeof selections === 'undefined' || typeof selections === null || selections.length === 0 ) {
                     this.navCtrl.navigateBack( 'home' );
                 } else {
                     this.sessions = this.filterResolvedData( selections, this.sessionsFilter );
                     this.terms = this.filterResolvedData( selections, this.termsFilter );
                     this.subjects = this.filterResolvedData( selections, this.subjectsFilter );
+                    console.log( this.sessions, this.terms, this.subjects );
                 }
 
             },
@@ -69,10 +70,24 @@ export class SelectPagePage implements OnInit {
         const dataToFind = selections.find(
             ( dat: { id: any; } ) => dat.id === filter
         );
+        let sortBy = '';
+        switch ( filter ) {
+            case this.sessionsFilter:
+                sortBy = 'sessionId';
+                break;
+            case this.termsFilter:
+                sortBy = 'termId';
+                break;
+            case this.subjectsFilter:
+                sortBy = 'subjectId';
+                break;
 
+            default:
+                break;
+        }
         if ( Object.entries( dataToFind ).length !== 0 ) {
             return dataToFind.data.sort(
-                ( a: { session_id: number; }, b: { session_id: number; } ) => a.session_id - b.session_id
+                ( a: any, b: any ) => a[ sortBy ] - b[ sortBy ]
             );
         }
     }
@@ -102,7 +117,7 @@ export class SelectPagePage implements OnInit {
                         };
                         console.log( appServiceData );
                         this.appS.selectOptions.next( appServiceData );
-                    } catch (error) {
+                    } catch ( error ) {
 
                     }
 

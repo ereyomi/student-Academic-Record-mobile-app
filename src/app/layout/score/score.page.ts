@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Store, select } from '@ngrx/store';
+import { Students } from 'src/app/models/students';
 import { IndexedDbService } from 'src/app/services/indexed-db.service';
 
 
@@ -9,7 +10,7 @@ import { IndexedDbService } from 'src/app/services/indexed-db.service';
     styleUrls: [ './score.page.scss' ],
 } )
 export class ScorePage implements OnInit {
-    @Input() student: {};
+    @Input() student: Students;
     focusStatus = false;
     selection = {
         sessionSelection: '2',
@@ -20,6 +21,7 @@ export class ScorePage implements OnInit {
     constructor( private store: Store<any>, private db: IndexedDbService ) { }
 
     ngOnInit() {
+        console.log( this.student );
     }
     onInputIt( event: any ): void {
         const score: number = event.target.value;

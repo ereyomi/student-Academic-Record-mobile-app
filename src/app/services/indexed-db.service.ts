@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { dbBluePrint } from './dbServiceResource/dbBluePrint';
 import { PopulateDBService } from './populate-db.service';
-import { applySourceSpanToStatementIfNeeded } from '@angular/compiler/src/output/output_ast';
 
 @Injectable( {
     providedIn: 'root'
@@ -125,7 +124,7 @@ export class IndexedDbService {
     async isDump() {
         this.openDb();
         const openmydb = this.indexedDatabase;
-        console.log( 'dumping' );
+        console.log( 'isDumping' );
         return new Promise( ( resolve, reject ) => {
             openmydb.onsuccess = async () => {
                 const dataBase = openmydb.result;
@@ -141,7 +140,7 @@ export class IndexedDbService {
                     }
                 };
                 tx.onerror = () => {
-                    console.log( 'txyghv.result' );
+                    console.log( 'isDump.error' );
                 };
             };
         } );
@@ -274,7 +273,7 @@ export class IndexedDbService {
                         cursor.continue();
                     } else {
                         const filterIt = toSendData.filter(
-                            ( data ) => data.student_id === 1 && data.subject_id === 1
+                            ( data ) => data.studentId === 1 && data.subjectId === 1
                         );
                         console.log( 'filter: ', filterIt );
                         this.academicRecord.next( toSendData );

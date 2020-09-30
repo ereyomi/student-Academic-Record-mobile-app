@@ -13,26 +13,26 @@ export class RecordPagePage implements OnInit {
     students = [
         {
             address: 'Ereyomi has no address',
-            admission_year: '2019/2020',
+            admissionYear: '2019/2020',
             age: 24,
             class: 'JSS1',
             email: 'ereyomioluwaseyi@gmail.com',
-            first_name: 'Ereyomi',
+            firstName: 'Ereyomi',
             gender: 'male',
             id: '70b3b10a-ee23-46c1-9aad-3f3099422f8c',
-            last_name: 'Samuel',
-            user_id: 2,
+            lastName: 'Samuel',
+            userId: 2,
         }, {
             address: 'Ereyomi has no address',
             admission_year: '2019/2020',
             age: 20,
-            class_id: 1,
+            classId: 1,
             email: 'ereyomioluwaseyi@gmail.com',
-            first_name: 'Another',
+            firstName: 'Another',
             gender: 'female',
             id: '31151873-0f00-466b-8451-bda9134643bd',
-            last_name: 'Student',
-            user_id: 3
+            lastName: 'Student',
+            userId: 3
         }
     ];
     constructor(

@@ -3,7 +3,7 @@
         "objectStoreName": "dump",
         "data": [
             {
-                "dump_id": "dump_version_1",
+                "dumpId": "dump_version_1",
                 "status": true
             }
         ]
@@ -12,15 +12,15 @@
         "objectStoreName": "sessions",
         "data": [
             {
-                "session_id": 1,
+                "sessionId": 1,
                 "name": "2019/2020"
             },
             {
-                "session_id": 2,
+                "sessionId": 2,
                 "name": "2020/2021"
             },
             {
-                "session_id": 3,
+                "sessionId": 3,
                 "name": "2021/2022"
             }
         ]
@@ -29,24 +29,24 @@
         "objectStoreName": "terms",
         "data": [
             {
-                "term_id": 1,
+                "termId": 1,
                 "name": "FIRST TERM"
             },
             {
-                "term_id": 2,
+                "termId": 2,
                 "name": "SECOND TERM"
             },
             {
-                "term_id": 3,
+                "termId": 3,
                 "name": "THIRD TERM"
             }
         ]
     },
     {
-        "objectStoreName": "class",
+        "objectStoreName": "classes",
         "data": [
             {
-                "class_id": 1,
+                "classId": 1,
                 "name": "JSS1A"
             }
         ]
@@ -55,19 +55,19 @@
         "objectStoreName": "subjects",
         "data": [
             {
-                "subject_id": 1,
+                "subjectId": 1,
                 "name": "MATHEMATICS 1",
                 "grade": "JSS1",
                 "term": "FIRST TERM"
             },
             {
-                "subject_id": 2,
+                "subjectId": 2,
                 "name": "ENGLISH LANGUAGE 1",
                 "grade": "JSS1",
                 "term": "FIRST TERM"
             },
             {
-                "subject_id": 3,
+                "subjectId": 3,
                 "name": "BASIC SCIENCE 1",
                 "grade": "JSS1",
                 "term": "FIRST TERM"
@@ -78,37 +78,37 @@
         "objectStoreName": "students",
         "data": [
             {
-                "user_id": 1,
-                "class_id": 1,
-                "first_name": "Ereyomi",
-                "last_name": "Samuel",
+                "userId": 1,
+                "classId": 1,
+                "firstName": "Ereyomi",
+                "lastName": "Samuel",
                 "age": 24,
                 "gender": "male",
                 "address": "Ereyomi has no address",
                 "email": "ereyomioluwaseyi@gmail.com",
-                "admission_year": "2019/2020"
+                "admissionYear": "2019/2020"
             },
             {
-                "user_id": 2,
-                "class_id": 1,
-                "first_name": "Ereyomi",
-                "last_name": "Samuel",
+                "userId": 2,
+                "classId": 1,
+                "firstName": "Ereyomi",
+                "lastName": "Samuel",
                 "age": 24,
                 "gender": "male",
                 "address": "Ereyomi has no address",
                 "email": "ereyomioluwaseyi@gmail.com",
-                "admission_year": "2019/2020"
+                "admissionYear": "2019/2020"
             },
             {
-                "user_id": 3,
-                "class_id": 1,
-                "first_name": "Another",
-                "last_name": "Student",
+                "userId": 3,
+                "classId": 1,
+                "firstName": "Another",
+                "lastName": "Student",
                 "age": 20,
                 "gender": "female",
                 "address": "Ereyomi has no address",
                 "email": "ereyomioluwaseyi@gmail.com",
-                "admission_year": "2019/2020"
+                "admissionYear": "2019/2020"
             }
         ]
     },
@@ -116,46 +116,49 @@
         "objectStoreName": "academic_report",
         "data": [
             {
-                "session_id": 1,
-                "term_id": 1,
-                "class_id": 1,
-                "subject_id": 1,
-                "student_id": 2,
-                "ca_score": 28,
+                "sessionId": 1,
+                "termId": 1,
+                "classId": 1,
+                "subjectId": 1,
+                "studentId": 2,
+                "caScore": 28,
+                "examScore": 68,
                 "remark": "Keep it up",
-                "offline_status": true,
-                "added_by": 1,
-                "approved_by": 1,
-                "created_at": "nil",
-                "updated_at": "nil"
+                "offlineStatus": true,
+                "addedBy": 1,
+                "approvedBy": 1,
+                "createdAt": "nil",
+                "updatedAt": "nil"
             },
             {
-                "session_id": 1,
-                "term_id": 1,
-                "class_id": 1,
-                "subject_id": 1,
-                "student_id": 1,
-                "ca_score": 28,
+                "sessionId": 1,
+                "termId": 1,
+                "classId": 1,
+                "subjectId": 1,
+                "studentId": 1,
+                "caScore": 8,
+                "examScore": 50,
                 "remark": "Keep it up",
-                "offline_status": true,
-                "added_by": 1,
-                "approved_by": 1,
-                "created_at": "nil",
-                "updated_at": "nil"
+                "offlineStatus": true,
+                "addedBy": 1,
+                "approvedBy": 1,
+                "createdAt": "nil",
+                "updatedAt": "nil"
             },
             {
-                "session_id": 1,
-                "term_id": 2,
-                "class_id": 1,
-                "subject_id": 1,
-                "student_id": 1,
-                "ca_score": 28,
+                "sessionId": 1,
+                "termId": 2,
+                "classId": 1,
+                "subjectId": 1,
+                "studentId": 1,
+                "caScore": 18,
+                "examScore": 48,
                 "remark": "Keep it up",
-                "offline_status": true,
-                "added_by": 1,
-                "approved_by": 1,
-                "created_at": "nil",
-                "updated_at": "nil"
+                "offlineStatus": true,
+                "addedBy": 1,
+                "approvedBy": 1,
+                "createdAt": "nil",
+                "updatedAt": "nil"
             }
         ]
     }

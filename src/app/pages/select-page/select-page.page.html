@@ -28,7 +28,7 @@
                         placeholder="e.g 2018/2019" 
                         value="" 
                         formControlName="sessionSelection">
-                        <ion-select-option value="{{session.session_id}}" *ngFor="let session of sessions">{{ session.name }}</ion-select-option>
+                        <ion-select-option value="{{session.sessionId}}" *ngFor="let session of sessions">{{ session.name }}</ion-select-option>
                     </ion-select>
                 </ion-item>
                 <ion-item lines="none" class="custom-items">
@@ -36,7 +36,7 @@
                         SELECT TERM
                     </ion-label>
                     <ion-select placeholder="e.g FIRST TERM" formControlName="termSelection">
-                        <ion-select-option value="{{term.term_id}}" *ngFor="let term of terms">{{term.name}}</ion-select-option>
+                        <ion-select-option value="{{term.termId}}" *ngFor="let term of terms">{{term.name}}</ion-select-option>
                     </ion-select>
                 </ion-item>
                 <ion-item lines="none" class="custom-items">
@@ -44,7 +44,7 @@
                         SELECT SUBJECT
                     </ion-label>
                     <ion-select placeholder="e.g MATH" formControlName="subjectSelection">
-                        <ion-select-option value="{{subject.subject_id}}" *ngFor="let subject of subjects">{{ subject.name }}</ion-select-option>
+                        <ion-select-option value="{{subject.subjectId}}" *ngFor="let subject of subjects">{{ subject.name }}</ion-select-option>
                     </ion-select>
                 </ion-item>
                 <ion-item lines="none" class="custom-items">
