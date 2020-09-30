@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { IndexedDbService } from 'src/app/services/indexed-db.service';
 import { AppService } from 'src/app/services/app.service';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { Selections } from 'src/app/services/models/selections';
+import { Selections } from 'src/app/models/selections';
 
 @Component( {
     selector: 'app-select-page',
@@ -64,7 +64,7 @@ export class SelectPagePage implements OnInit {
             subjectSelection: [ '', [ Validators.required ] ],
         } );
     }
-    filterResolvedData( selections: any[], filter ) {
+    filterResolvedData( selections: any[], filter: any ) {
 
         const dataToFind = selections.find(
             ( dat: { id: any; } ) => dat.id === filter
