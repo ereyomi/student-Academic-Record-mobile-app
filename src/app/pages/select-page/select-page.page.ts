@@ -60,9 +60,9 @@ export class SelectPagePage implements OnInit {
     }
     initForm() {
         this.selectionForm = this.fb.group( {
-            sessionSelection: [ '', [ Validators.required ] ],
-            termSelection: [ '', [ Validators.required ] ],
-            subjectSelection: [ '', [ Validators.required ] ],
+            sessionId: [ '', [ Validators.required ] ],
+            termId: [ '', [ Validators.required ] ],
+            subjectId: [ '', [ Validators.required ] ],
         } );
     }
     filterResolvedData( selections: any[], filter: any ) {

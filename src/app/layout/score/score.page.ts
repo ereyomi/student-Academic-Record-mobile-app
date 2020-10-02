@@ -13,9 +13,9 @@ export class ScorePage implements OnInit {
     @Input() student: Students;
     focusStatus = false;
     selection = {
-        sessionSelection: '2',
-        subjectSelection: '3',
-        termSelection: '3',
+        sessionId: '2',
+        subjectId: '3',
+        termId: '3',
         type: 'exam'
     };
     constructor( private store: Store<any>, private db: IndexedDbService ) { }

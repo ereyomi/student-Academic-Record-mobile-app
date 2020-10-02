@@ -257,6 +257,7 @@ export class IndexedDbService {
 
     }
     async processAcademicScore(payload) {
+        // const { userId, subjectId} = payload;
         this.openDb();
         const openmydb = this.indexedDatabase;
         const objectStoreName = 'academic_report';
