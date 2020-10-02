@@ -256,8 +256,8 @@ export class IndexedDbService {
         };
 
     }
-    async processAcademicScore(payload) {
-        // const { userId, subjectId} = payload;
+    async processAcademicScore( payload ) {
+        const { studentId, sessionId, subjectId, termId, type, score } = payload;
         this.openDb();
         const openmydb = this.indexedDatabase;
         const objectStoreName = 'academic_report';
@@ -273,12 +273,15 @@ export class IndexedDbService {
                         toSendData.push( cursor.value );
                         cursor.continue();
                     } else {
+                        console.log( 'toSendData', toSendData );
                         const filterIt = toSendData.filter(
-                            ( data ) => data.studentId === 1 && data.subjectId === 1
+                            // tslint:disable-next-line:max-line-length
+                            ( data ) => data.studentId === studentId && data.sessionId === sessionId && data.subjectId === subjectId && data.termId === termId
                         );
                         console.log( 'filter: ', filterIt );
-                        this.academicRecord.next( toSendData );
-                        resolve( toSendData );
+                        this.updateData( { ...filterIt[0], examScore: score });
+                        // this.academicRecord.next( toSendData );
+                        // resolve( toSendData );
                     }
                 };
                 tx.onerror = () => {
@@ -300,6 +303,27 @@ export class IndexedDbService {
                 tx.onsuccess = ( event: any ) => {
                     const txSuccess = event.target.result;
                     console.log( txSuccess );
+                };
+                tx.onerror = () => {
+                    console.log( 'error while trying to insert academic record' );
+                };
+
+            } );
+        };
+
+    }
+    async updateData( data: {} ) {
+        this.openDb();
+        const openmydb = this.indexedDatabase;
+        const objectStoreName = 'academic_report';
+        openmydb.onsuccess = () => {
+            const dataBase = openmydb.result;
+            return new Promise( async ( resolve, reject ) => {
+                const tx = await dataBase.transaction( objectStoreName, 'readwrite' )
+                    .objectStore( objectStoreName ).put( data );
+                tx.onsuccess = ( event: any ) => {
+                    const txSuccess = event.target.result;
+                    resolve( event.target.result );
                 };
                 tx.onerror = () => {
                     console.log( 'error while trying to insert academic record' );

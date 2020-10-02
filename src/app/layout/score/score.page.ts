@@ -13,9 +13,9 @@ export class ScorePage implements OnInit {
     @Input() student: Students;
     focusStatus = false;
     selection = {
-        sessionId: '2',
-        subjectId: '3',
-        termId: '3',
+        sessionId: 1,
+        subjectId: 1,
+        termId: 1,
         type: 'exam'
     };
     constructor( private store: Store<any>, private db: IndexedDbService ) { }
@@ -32,10 +32,11 @@ export class ScorePage implements OnInit {
         const payload = {
             ...this.selection,
             ...this.student,
+            studentId: this.student.userId,
             score,
         };
         console.log( 'score: ', payload );
-        // this.db.processAcademicScore( payload );
+        this.db.processAcademicScore( payload );
     }
 
     onFocusIt() {
