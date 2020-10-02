@@ -29,8 +29,13 @@ export class ScorePage implements OnInit {
              type: 'UPDATE_SCORE',
              payload: score
          } ); */
-        console.log( 'score: ', score );
-        this.db.processAcademicScore();
+        const payload = {
+            ...this.selection,
+            ...this.student,
+            score,
+        };
+        console.log( 'score: ', payload );
+        // this.db.processAcademicScore( payload );
     }
 
     onFocusIt() {

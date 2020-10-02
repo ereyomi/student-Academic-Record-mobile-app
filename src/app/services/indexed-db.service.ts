@@ -256,7 +256,7 @@ export class IndexedDbService {
         };
 
     }
-    async processAcademicScore() {
+    async processAcademicScore(payload) {
         this.openDb();
         const openmydb = this.indexedDatabase;
         const objectStoreName = 'academic_report';
@@ -283,7 +283,6 @@ export class IndexedDbService {
                 tx.onerror = () => {
                     console.log( 'txyghv.result' );
                 };
-
             } );
         };
 

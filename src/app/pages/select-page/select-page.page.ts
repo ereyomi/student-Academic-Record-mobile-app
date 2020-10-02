@@ -94,7 +94,6 @@ export class SelectPagePage implements OnInit {
 
     async loadSelectForExam() {
 
-
         const loading = await this.loadingController.create( {
             spinner: 'crescent',
             // duration: 2000,
@@ -120,17 +119,12 @@ export class SelectPagePage implements OnInit {
                     } catch ( error ) {
 
                     }
-
-
-
-
                     loading.dismiss();
                 }
             }
         } );
 
         const { role, data } = await loading.onDidDismiss();
-        console.log( 'Loading dismissed with role:', role, data );
         this.router.navigateByUrl( `/record` );
 
     }
