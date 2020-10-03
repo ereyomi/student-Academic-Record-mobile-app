@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { dbBluePrint } from './dbServiceResource/dbBluePrint';
 import { PopulateDBService } from './populate-db.service';
-
+import { Operations } from 'src/app/enum/operations';
+import { ObjectStores } from 'src/app/enum/objectStores'; 
 @Injectable( {
     providedIn: 'root'
 } )
@@ -257,34 +258,69 @@ export class IndexedDbService {
 
     }
 
-    async loadDataFromObjectStore( objectStoreName: string ) {
+    async performDatabaseOperation( objectStoreName: string, type: string, passIndata: any = {} ) {
         this.openDb();
         const openmydb = this.indexedDatabase;
+        const theData: any[] = [];
         openmydb.onsuccess = async () => {
             const dataBase = openmydb.result;
-            const processedData: any[] = [];
             const tx = await dataBase.transaction( objectStoreName, 'readwrite' )
-                .objectStore( objectStoreName ).openCursor();
-            tx.onsuccess = ( event: any ) => {
+                .objectStore( objectStoreName );
+            let trans: any;
+            switch ( type ) {
+                case 'openCursor':
+                    trans = tx.openCursor();
+                    break;
+                case 'getAll':
+                    trans = tx.getAll();
+                    break;
+                case 'update':
+                    trans = tx.put( passIndata );
+                    break;
+                case 'add':
+                    trans = tx.add( passIndata );
+                    break;
+                default:
+                    break;
+            }
+            /* const tx = await dataBase.transaction( objectStoreName, 'readwrite' )
+                .objectStore( objectStoreName ).openCursor(); */
+            console.log( 'performing operation');
+            trans.onsuccess = ( event: any ) => {
                 const cursor = event.target.result;
                 if ( cursor ) {
-                    processedData.push( cursor.value );
+                    console.log( cursor.value );
+                    theData.push( cursor.value );
                     cursor.continue();
                 } else {
-                    console.log( 'processedData', processedData );
-                    this.dataSaverSwitch( objectStoreName, processedData );
+                    console.log( 'theData', theData );
                 }
             };
-            tx.onerror = () => {
-                console.log( 'processedData error');
+            trans.onerror = () => {
+                console.log( 'processed Data error' );
             };
         };
+        return theData;
+    }
+
+    async getDataFromObjectStore( objectStoreName: string ) {
+        const d = this.performDatabaseOperation( objectStoreName, 'openCursor' );
+        console.log( 'ddd: ', d );
+        return d;
+    }
+
+    async loadDataFromObjectStore( objectStoreName: string ) {
+        const getData = await this.getDataFromObjectStore( objectStoreName );
+        console.log( 'getData' );
+        if ( getData.length !== 0 ) {
+            this.dataSaverSwitch( objectStoreName, getData );
+        }
     }
 
     dataSaverSwitch( objectStoreName: string, data: any ) {
         switch ( objectStoreName ) {
             case 'academic_record':
-                this.academicRecord.next(data);
+                this.academicRecord.next( data );
                 break;
             default:
                 break;
@@ -294,21 +330,23 @@ export class IndexedDbService {
 
     async processAcademicScore( payload ) {
         const { studentId, sessionId, subjectId, termId, type, score } = payload;
-                    if ( cursor ) {
-                        toSendData.push( cursor.value );
-                        cursor.continue();
-                    } else {
-                        console.log( 'toSendData', toSendData );
-                        const filterIt = toSendData.filter(
-                            // tslint:disable-next-line:max-line-length
-                            ( data ) => data.studentId === studentId && data.sessionId === sessionId && data.subjectId === subjectId && data.termId === termId
-                        );
-                        console.log( 'filter: ', filterIt );
-                        this.updateData( { ...filterIt[0], examScore: score });
-                        // this.academicRecord.next( toSendData );
-                        // resolve( toSendData );
-                    }
-        };
+        this.loadDataFromObjectStore( 'academic_report');
+        /* if ( cursor ) {
+            toSendData.push( cursor.value );
+            cursor.continue();
+        } else {
+            console.log( 'toSendData', toSendData );
+            const filterIt = toSendData.filter(
+                // tslint:disable-next-line:max-line-length
+                ( data ) => data.studentId === studentId &&
+                data.sessionId === sessionId && data.subjectId === subjectId
+                && data.termId === termId
+            );
+            console.log( 'filter: ', filterIt );
+            this.updateData( { ...filterIt[0], examScore: score });
+            // this.academicRecord.next( toSendData );
+            // resolve( toSendData );
+        } */
     }
     async insertStudentAcademicReport( data: {} ) {
         this.openDb();
