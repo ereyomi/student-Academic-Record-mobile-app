@@ -256,19 +256,44 @@ export class IndexedDbService {
         };
 
     }
-    async processAcademicScore( payload ) {
-        const { studentId, sessionId, subjectId, termId, type, score } = payload;
+
+    async loadDataFromObjectStore( objectStoreName: string ) {
         this.openDb();
         const openmydb = this.indexedDatabase;
-        const objectStoreName = 'academic_report';
-        openmydb.onsuccess = () => {
+        openmydb.onsuccess = async () => {
             const dataBase = openmydb.result;
-            return new Promise( async ( resolve, reject ) => {
-                const toSendData: any[] = [];
-                const tx = await dataBase.transaction( objectStoreName, 'readwrite' )
-                    .objectStore( objectStoreName ).openCursor();
-                tx.onsuccess = ( event: any ) => {
-                    const cursor = event.target.result;
+            const processedData: any[] = [];
+            const tx = await dataBase.transaction( objectStoreName, 'readwrite' )
+                .objectStore( objectStoreName ).openCursor();
+            tx.onsuccess = ( event: any ) => {
+                const cursor = event.target.result;
+                if ( cursor ) {
+                    processedData.push( cursor.value );
+                    cursor.continue();
+                } else {
+                    console.log( 'processedData', processedData );
+                    this.dataSaverSwitch( objectStoreName, processedData );
+                }
+            };
+            tx.onerror = () => {
+                console.log( 'processedData error');
+            };
+        };
+    }
+
+    dataSaverSwitch( objectStoreName: string, data: any ) {
+        switch ( objectStoreName ) {
+            case 'academic_record':
+                this.academicRecord.next(data);
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+
+    async processAcademicScore( payload ) {
+        const { studentId, sessionId, subjectId, termId, type, score } = payload;
                     if ( cursor ) {
                         toSendData.push( cursor.value );
                         cursor.continue();
@@ -283,13 +308,7 @@ export class IndexedDbService {
                         // this.academicRecord.next( toSendData );
                         // resolve( toSendData );
                     }
-                };
-                tx.onerror = () => {
-                    console.log( 'txyghv.result' );
-                };
-            } );
         };
-
     }
     async insertStudentAcademicReport( data: {} ) {
         this.openDb();
@@ -323,6 +342,7 @@ export class IndexedDbService {
                     .objectStore( objectStoreName ).put( data );
                 tx.onsuccess = ( event: any ) => {
                     const txSuccess = event.target.result;
+                    console.log( event.target );
                     resolve( event.target.result );
                 };
                 tx.onerror = () => {
