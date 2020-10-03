@@ -32,7 +32,6 @@ export class ScorePage implements OnInit {
         const payload = {
             ...this.selection,
             ...this.student,
-            studentId: this.student.userId,
             score,
         };
         console.log( 'score: ', payload );

@@ -42,7 +42,8 @@ export class RecordPagePage implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.db.loadDataFromObjectStore( 'academic_report' );
+        console.log( 'initiate record' );
+        this.db.loadacademicRecordsData();
     }
 
     myInit() {

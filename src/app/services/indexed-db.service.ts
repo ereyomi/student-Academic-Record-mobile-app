@@ -22,7 +22,7 @@ export class IndexedDbService {
     private dumpReady: BehaviorSubject<boolean> = new BehaviorSubject( false );
     private selection = new BehaviorSubject( [] );
     private students: BehaviorSubject<any[]> = new BehaviorSubject( [] );
-    private academicRecord = new BehaviorSubject( [] );
+    private academicRecords = new BehaviorSubject( [] );
 
     constructor( private plf: Platform, private dump: PopulateDBService ) {
         this.plf.ready().then( async () => {
@@ -97,7 +97,7 @@ export class IndexedDbService {
         return this.students.asObservable();
     }
     getAcademicReports(): Observable<any[]> {
-        return this.academicRecord.asObservable();
+        return this.academicRecords.asObservable();
     }
     dumpData() {
         this.dump.getDumpState().subscribe(
@@ -278,14 +278,14 @@ export class IndexedDbService {
                     trans = tx.put( passIndata );
                     break;
                 case Operations.add:
-                    trans = tx.add( passIndata );
+                    trans = tx.add( { id: this.createUUID(), ...passIndata } );
                     break;
                 default:
                     break;
             }
             /* const tx = await dataBase.transaction( objectStoreName, 'readwrite' )
                 .objectStore( objectStoreName ).openCursor(); */
-            console.log( 'performing operation');
+            console.log( 'performing operation' );
             trans.onsuccess = ( event: any ) => {
                 switch ( type ) {
                     case Operations.openCursor:
@@ -294,13 +294,16 @@ export class IndexedDbService {
                             console.log( cursor.value );
                             theData.push( cursor.value );
                             cursor.continue();
+                        } else {
+                            this.dataSaverSwitch( objectStoreName, theData );
+                            return theData;
                         }
                         break;
                     case Operations.getAll:
                         theData.push( ...trans.result );
                         break;
                     case Operations.put:
-                        console.log('successfully updated: ', event.target.result );
+                        console.log( 'successfully updated: ', event.target.result );
                         break;
                     case Operations.add:
                         console.log( 'added: ', event.target.result );
@@ -308,33 +311,18 @@ export class IndexedDbService {
                     default:
                         break;
                 }
+                this.dataSaverSwitch( objectStoreName, theData );
 
             };
-            trans.onerror = (error: any) => {
+            trans.onerror = ( error: any ) => {
                 console.log( 'processed Data error', error );
             };
         };
-        return theData;
     }
-
-    async getDataFromObjectStore( objectStoreName: string ) {
-        const d = this.performDatabaseOperation( objectStoreName, Operations.openCursor );
-        console.log( 'ddd: ', d );
-        return d;
-    }
-
-    async loadDataFromObjectStore( objectStoreName: string ) {
-        const getData = await this.getDataFromObjectStore( objectStoreName );
-        console.log( 'getData' );
-        if ( getData.length !== 0 ) {
-            this.dataSaverSwitch( objectStoreName, getData );
-        }
-    }
-
     dataSaverSwitch( objectStoreName: string, data: any ) {
         switch ( objectStoreName ) {
             case ObjectStores.academicRecords:
-                this.academicRecord.next( data );
+                this.academicRecords.next( data );
                 break;
             case ObjectStores.students:
                 this.students.next( data );
@@ -344,28 +332,36 @@ export class IndexedDbService {
         }
         return true;
     }
+    async loadacademicRecordsData() {
+        await this.performDatabaseOperation( ObjectStores.academicRecords, Operations.openCursor );
+    }
 
     async processAcademicScore( payload: any ) {
-        const { studentId, sessionId, subjectId, termId, type, score } = payload;
-        this.academicRecord.subscribe(
-            data => console.log( data )
+        const { userId, sessionId, subjectId, termId, type, score } = payload;
+        this.academicRecords.subscribe(
+            academicRecords => {
+                if ( academicRecords.length === 0 ) {
+                    // insert data
+                } else {
+                    console.log( 'academicRecords: ', academicRecords );
+                    const checkIfRecordExist = academicRecords.filter(
+                        ( data ) => data.studentId === userId &&
+                            data.sessionId === sessionId && data.subjectId === subjectId
+                            && data.termId === termId
+                    );
+                    if ( typeof checkIfRecordExist === 'undefined') {
+                        console.log( 'hmmm I didnt get any data' );
+                        // insert data
+                    } else {
+                        console.log( 'do you get a data: ', checkIfRecordExist );
+                        // update data
+                    }
+
+                }
+
+                // this.updateData( { ...filterIt[ 0 ], examScore: score } );
+            }
         );
-        /* if ( cursor ) {
-            toSendData.push( cursor.value );
-            cursor.continue();
-        } else {
-            console.log( 'toSendData', toSendData );
-            const filterIt = toSendData.filter(
-                // tslint:disable-next-line:max-line-length
-                ( data ) => data.studentId === studentId &&
-                data.sessionId === sessionId && data.subjectId === subjectId
-                && data.termId === termId
-            );
-            console.log( 'filter: ', filterIt );
-            this.updateData( { ...filterIt[0], examScore: score });
-            // this.academicRecord.next( toSendData );
-            // resolve( toSendData );
-        } */
     }
     async insertStudentAcademicReport( data: {} ) {
         this.openDb();
@@ -379,28 +375,6 @@ export class IndexedDbService {
                 tx.onsuccess = ( event: any ) => {
                     const txSuccess = event.target.result;
                     console.log( txSuccess );
-                };
-                tx.onerror = () => {
-                    console.log( 'error while trying to insert academic record' );
-                };
-
-            } );
-        };
-
-    }
-    async updateData( data: {} ) {
-        this.openDb();
-        const openmydb = this.indexedDatabase;
-        const objectStoreName = 'academic_report';
-        openmydb.onsuccess = () => {
-            const dataBase = openmydb.result;
-            return new Promise( async ( resolve, reject ) => {
-                const tx = await dataBase.transaction( objectStoreName, 'readwrite' )
-                    .objectStore( objectStoreName ).put( data );
-                tx.onsuccess = ( event: any ) => {
-                    const txSuccess = event.target.result;
-                    console.log( event.target );
-                    resolve( event.target.result );
                 };
                 tx.onerror = () => {
                     console.log( 'error while trying to insert academic record' );
