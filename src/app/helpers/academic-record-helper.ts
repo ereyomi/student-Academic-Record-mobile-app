@@ -1,8 +1,12 @@
+const baseTen = 10; // for radix (check documentation)
+
 export const formatAcademicRecordPayload
     = ( {
+        id,
         sessionId,
         subjectId,
         termId,
+        userId,
         studentId,
         caScore,
         examScore,
@@ -13,12 +17,13 @@ export const formatAcademicRecordPayload
         createdAt,
         updatedAt
     } ) => {
-        const baseTen = 10; // for radix (check documentation)
+        const theStudentId = isNaN( studentId ) ? ( isNaN( userId ) ? 0 : userId) : studentId;
         return {
+            id,
             sessionId: parseInt( sessionId, baseTen ),
             subjectId: parseInt( subjectId, baseTen ),
             termId: parseInt( termId, baseTen ),
-            studentId: parseInt( studentId, baseTen ),
+            studentId: parseInt( theStudentId, baseTen ),
             caScore: parseInt( caScore, baseTen ),
             examScore: parseInt( examScore, baseTen ),
             remark,
@@ -31,3 +36,25 @@ export const formatAcademicRecordPayload
         };
 
     };
+
+export const formatIdRelatedToInt
+    = ( {
+        sessionId,
+        subjectId,
+        termId,
+        userId,
+        caScore,
+        examScore,
+    } ) => {
+        return {
+            sessionId: parseInt( sessionId, baseTen ),
+            subjectId: parseInt( subjectId, baseTen ),
+            termId: parseInt( termId, baseTen ),
+            userId: parseInt( userId, baseTen ),
+            studentId: parseInt( userId, baseTen ),
+            caScore: parseInt( caScore, baseTen ),
+            examScore: parseInt( examScore, baseTen ),
+        };
+
+    };
+

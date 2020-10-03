@@ -1,4 +1,4 @@
-export interface AcademicPayload {
+export interface AcademicPayloadModel {
     sessionId: number;
     subjectId: number;
     termId: number;

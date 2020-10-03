@@ -5,6 +5,8 @@ import { dbBluePrint } from './dbServiceResource/dbBluePrint';
 import { PopulateDBService } from './populate-db.service';
 import { Operations } from 'src/app/enum/operations';
 import { ObjectStores } from 'src/app/enum/objectStores';
+import { formatAcademicRecordPayload, formatIdRelatedToInt } from '../helpers/academic-record-helper';
+import { AcademicPayloadModel } from '../models/academic-payload-model';
 @Injectable( {
     providedIn: 'root'
 } )
@@ -258,7 +260,7 @@ export class IndexedDbService {
 
     }
 
-    async performDatabaseOperation( objectStoreName: string, type: string, passIndata: any = {} ) {
+    async performDatabaseOperation( objectStoreName: string, typeOfOperation: string, passIndata: any = {} ) {
         this.openDb();
         const openmydb = this.indexedDatabase;
         const theData: any[] = [];
@@ -267,7 +269,7 @@ export class IndexedDbService {
             const tx = await dataBase.transaction( objectStoreName, 'readwrite' )
                 .objectStore( objectStoreName );
             let trans: any;
-            switch ( type ) {
+            switch ( typeOfOperation ) {
                 case Operations.openCursor:
                     trans = tx.openCursor();
                     break;
@@ -287,7 +289,7 @@ export class IndexedDbService {
                 .objectStore( objectStoreName ).openCursor(); */
             console.log( 'performing operation' );
             trans.onsuccess = ( event: any ) => {
-                switch ( type ) {
+                switch ( typeOfOperation ) {
                     case Operations.openCursor:
                         const cursor = event.target.result;
                         if ( cursor ) {
@@ -336,33 +338,42 @@ export class IndexedDbService {
         await this.performDatabaseOperation( ObjectStores.academicRecords, Operations.openCursor );
     }
 
-    async processAcademicScore( payload: any ) {
-        const { userId, sessionId, subjectId, termId, type, score } = payload;
+    async processAcademicScore( passInPayload: any ) {
+        const queryData = formatIdRelatedToInt( passInPayload );
+        console.log( 'queryData: ', queryData );
+        const { studentId, sessionId, subjectId, termId, examScore, caScore } = queryData;
         this.academicRecords.subscribe(
             academicRecords => {
                 if ( academicRecords.length === 0 ) {
                     // insert data
                 } else {
                     console.log( 'academicRecords: ', academicRecords );
-                    const checkIfRecordExist = academicRecords.filter(
-                        ( data ) => data.studentId === userId &&
+                    const checkIfRecordExist = academicRecords.find(
+                        ( data ) => data.studentId === studentId &&
                             data.sessionId === sessionId && data.subjectId === subjectId
                             && data.termId === termId
                     );
-                    if ( typeof checkIfRecordExist === 'undefined') {
+                    if ( typeof checkIfRecordExist === 'undefined' ) {
                         console.log( 'hmmm I didnt get any data' );
                         // insert data
                     } else {
                         console.log( 'do you get a data: ', checkIfRecordExist );
                         // update data
+                        const toUpdateRecord: any = {
+                            ...checkIfRecordExist,
+                            examScore,
+                            caScore,
+                        };
+                        const payloadToSave: AcademicPayloadModel = formatAcademicRecordPayload( toUpdateRecord );
+                        console.log( 'toUpdateRecord: ', toUpdateRecord, 'payloadToSave: ', payloadToSave );
+                        this.performDatabaseOperation( ObjectStores.academicRecords, Operations.put, payloadToSave );
                     }
 
                 }
-
-                // this.updateData( { ...filterIt[ 0 ], examScore: score } );
             }
         );
     }
+
     async insertStudentAcademicReport( data: {} ) {
         this.openDb();
         const openmydb = this.indexedDatabase;

@@ -18,6 +18,11 @@ export class ScorePage implements OnInit {
         termId: 1,
         type: 'exam'
     };
+    typeData = {
+        examScore: 0,
+        caScore: 0,
+    };
+
     constructor( private store: Store<any>, private db: IndexedDbService ) { }
 
     ngOnInit() {
@@ -32,9 +37,9 @@ export class ScorePage implements OnInit {
         const payload = {
             ...this.selection,
             ...this.student,
-            score,
+            ...this.scoreProcessing( this.selection.type, score ),
         };
-        console.log( 'score: ', payload );
+        console.log( 'payload: ', payload );
         this.db.processAcademicScore( payload );
     }
 
@@ -50,6 +55,19 @@ export class ScorePage implements OnInit {
                 console.log( 'no state', data );
             }
         } ); */
+    }
+    scoreProcessing( type: string, score: any ) {
+        switch ( type ) {
+            case 'exam':
+                this.typeData.examScore = score;
+                break;
+            case 'ca':
+                this.typeData.caScore = score;
+                break;
+            default:
+                break;
+        }
+        return this.typeData;
     }
 
 }
