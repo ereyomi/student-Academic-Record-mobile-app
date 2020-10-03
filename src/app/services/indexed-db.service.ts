@@ -336,15 +336,20 @@ export class IndexedDbService {
             case ObjectStores.academicRecords:
                 this.academicRecord.next( data );
                 break;
+            case ObjectStores.students:
+                this.students.next( data );
+                break;
             default:
                 break;
         }
         return true;
     }
 
-    async processAcademicScore( payload ) {
+    async processAcademicScore( payload: any ) {
         const { studentId, sessionId, subjectId, termId, type, score } = payload;
-        this.loadDataFromObjectStore( ObjectStores.academicRecords );
+        this.academicRecord.subscribe(
+            data => console.log( data )
+        );
         /* if ( cursor ) {
             toSendData.push( cursor.value );
             cursor.continue();
