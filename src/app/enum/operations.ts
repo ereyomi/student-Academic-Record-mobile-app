@@ -3,4 +3,5 @@ export enum Operations {
     add = 'add',
     delete = 'delete',
     put = 'put',
+    getAll = 'getAll',
 }

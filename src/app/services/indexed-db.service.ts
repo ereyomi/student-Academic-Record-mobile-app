@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { dbBluePrint } from './dbServiceResource/dbBluePrint';
 import { PopulateDBService } from './populate-db.service';
 import { Operations } from 'src/app/enum/operations';
-import { ObjectStores } from 'src/app/enum/objectStores'; 
+import { ObjectStores } from 'src/app/enum/objectStores';
 @Injectable( {
     providedIn: 'root'
 } )
@@ -268,16 +268,16 @@ export class IndexedDbService {
                 .objectStore( objectStoreName );
             let trans: any;
             switch ( type ) {
-                case 'openCursor':
+                case Operations.openCursor:
                     trans = tx.openCursor();
                     break;
-                case 'getAll':
+                case Operations.getAll:
                     trans = tx.getAll();
                     break;
-                case 'update':
+                case Operations.put:
                     trans = tx.put( passIndata );
                     break;
-                case 'add':
+                case Operations.add:
                     trans = tx.add( passIndata );
                     break;
                 default:
@@ -287,24 +287,38 @@ export class IndexedDbService {
                 .objectStore( objectStoreName ).openCursor(); */
             console.log( 'performing operation');
             trans.onsuccess = ( event: any ) => {
-                const cursor = event.target.result;
-                if ( cursor ) {
-                    console.log( cursor.value );
-                    theData.push( cursor.value );
-                    cursor.continue();
-                } else {
-                    console.log( 'theData', theData );
+                switch ( type ) {
+                    case Operations.openCursor:
+                        const cursor = event.target.result;
+                        if ( cursor ) {
+                            console.log( cursor.value );
+                            theData.push( cursor.value );
+                            cursor.continue();
+                        }
+                        break;
+                    case Operations.getAll:
+                        theData.push( ...trans.result );
+                        break;
+                    case Operations.put:
+                        console.log('successfully updated: ', event.target.result );
+                        break;
+                    case Operations.add:
+                        console.log( 'added: ', event.target.result );
+                        break;
+                    default:
+                        break;
                 }
+
             };
-            trans.onerror = () => {
-                console.log( 'processed Data error' );
+            trans.onerror = (error: any) => {
+                console.log( 'processed Data error', error );
             };
         };
         return theData;
     }
 
     async getDataFromObjectStore( objectStoreName: string ) {
-        const d = this.performDatabaseOperation( objectStoreName, 'openCursor' );
+        const d = this.performDatabaseOperation( objectStoreName, Operations.openCursor );
         console.log( 'ddd: ', d );
         return d;
     }
@@ -319,7 +333,7 @@ export class IndexedDbService {
 
     dataSaverSwitch( objectStoreName: string, data: any ) {
         switch ( objectStoreName ) {
-            case 'academic_record':
+            case ObjectStores.academicRecords:
                 this.academicRecord.next( data );
                 break;
             default:
@@ -330,7 +344,7 @@ export class IndexedDbService {
 
     async processAcademicScore( payload ) {
         const { studentId, sessionId, subjectId, termId, type, score } = payload;
-        this.loadDataFromObjectStore( 'academic_report');
+        this.loadDataFromObjectStore( ObjectStores.academicRecords );
         /* if ( cursor ) {
             toSendData.push( cursor.value );
             cursor.continue();
