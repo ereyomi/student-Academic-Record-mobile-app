@@ -5,7 +5,7 @@ import { dbBluePrint } from './dbServiceResource/dbBluePrint';
 import { PopulateDBService } from './populate-db.service';
 import { Operations } from 'src/app/enum/operations';
 import { ObjectStores } from 'src/app/enum/objectStores';
-import { formatAcademicRecordPayload, formatIdRelatedToInt } from '../helpers/academic-record-helper';
+import { formatAcademicRecordPayload, formatAndpopulateRecord, formatIdRelatedToInt } from '../helpers/academic-record-helper';
 import { AcademicPayloadModel } from '../models/academic-payload-model';
 @Injectable( {
     providedIn: 'root'
@@ -341,7 +341,7 @@ export class IndexedDbService {
     async processAcademicScore( passInPayload: any ) {
         const queryData = formatIdRelatedToInt( passInPayload );
         const { studentId, sessionId, subjectId, termId, examScore, caScore } = queryData;
-        let payloadToSave: AcademicPayloadModel = formatAcademicRecordPayload( passInPayload );
+        let payloadToSave: AcademicPayloadModel = formatAndpopulateRecord( passInPayload );
         console.log( payloadToSave );
         this.academicRecords.subscribe(
             academicRecords => {

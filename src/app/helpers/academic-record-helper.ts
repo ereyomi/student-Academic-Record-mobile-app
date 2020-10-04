@@ -2,6 +2,19 @@ import { AcademicPayloadModel } from '../models/academic-payload-model';
 
 const baseTen = 10; // for radix (check documentation)
 
+export const createUUID = () => {
+    let dt = new Date().getTime();
+    const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace( /[xy]/g, ( char ) => {
+        dt = Math.floor( dt / 16 );
+        // tslint:disable-next-line:no-bitwise
+        const r = ( dt + Math.random() * 16 ) % 16 | 0;
+        // tslint:disable-next-line:no-bitwise
+        return ( char === 'x' ? r : ( r & 0x3 | 0x8 ) ).toString( 16 );
+    } );
+    return uuid;
+};
+
+
 export const formatAcademicRecordPayload
     = ( {
         id,
@@ -19,7 +32,7 @@ export const formatAcademicRecordPayload
         createdAt,
         updatedAt
     } ): AcademicPayloadModel => {
-        const theStudentId = isNaN( studentId ) ? ( isNaN( userId ) ? 0 : userId) : studentId;
+        const theStudentId = isNaN( studentId ) ? ( isNaN( userId ) ? 0 : userId ) : studentId;
         return {
             id,
             sessionId: parseInt( sessionId, baseTen ),
@@ -63,17 +76,19 @@ export const formatIdRelatedToInt
 export const formatAndpopulateRecord = ( record: any ): AcademicPayloadModel => {
     const { studentId, userId } = record;
     const theStudentId = isNaN( studentId ) ? ( isNaN( userId ) ? 0 : userId ) : studentId;
+
     record = {
         ...record,
+        id: createUUID(),
         remark: 'by teacher',
         offlineStatus: false,
         addedBy: theStudentId,
         approvedBy: 0,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: todayDateInUTC(),
+        updatedAt: todayDateInUTC(),
     };
 
-    return formatAcademicRecordPayload( record);
+    return formatAcademicRecordPayload( record );
 };
 export const todayDateInUTC = () => {
     const tDate: Date = new Date();
