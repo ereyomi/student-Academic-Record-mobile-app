@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AppService } from 'src/app/services/app.service';
 import { NavController } from '@ionic/angular';
 import { IndexedDbService } from 'src/app/services/indexed-db.service';
+import { Selections } from 'src/app/models/selections';
 
 @Component( {
     selector: 'app-record-page',
@@ -10,7 +11,9 @@ import { IndexedDbService } from 'src/app/services/indexed-db.service';
 } )
 export class RecordPagePage implements OnInit {
     notAvailable = 0;
-    students = [
+    appSelection: any;
+    students: any[];
+    /* students = [
         {
             address: 'Ereyomi has no address',
             admissionYear: '2019/2020',
@@ -34,7 +37,7 @@ export class RecordPagePage implements OnInit {
             lastName: 'Student',
             userId: 3
         }
-    ];
+    ]; */
     constructor(
         private appS: AppService,
         private navCtrl: NavController,
@@ -50,19 +53,21 @@ export class RecordPagePage implements OnInit {
                 if ( isDump === true ) {
                     console.log( 'initiate academic record' );
                     this.db.loadacademicRecordsData();
+                    this.myInit();
                 }
             }
         } );
     }
 
     myInit() {
-        this.appS.getSelctionOptions().subscribe( appData => {
-            console.log( appData );
-            const getObjectAvailability = Object.entries( appData ).length;
+        this.appS.getSelctionOptions().subscribe( appDataSelection => {
+            console.log( appDataSelection );
+            const getObjectAvailability = Object.entries( appDataSelection ).length;
             console.log( getObjectAvailability );
             if ( getObjectAvailability === this.notAvailable ) {
                 this.goBackHome();
             } else {
+                this.appSelection = appDataSelection;
                 this.db.getStudents().subscribe( students => {
                     console.log( 'Recording for this students: ', students );
                     if ( students.length !== 0 ) {

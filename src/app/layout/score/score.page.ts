@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Store, select } from '@ngrx/store';
+import { Selections } from 'src/app/models/selections';
 import { Students } from 'src/app/models/students';
 import { AppService } from 'src/app/services/app.service';
 
@@ -11,13 +12,14 @@ import { AppService } from 'src/app/services/app.service';
 } )
 export class ScorePage implements OnInit {
     @Input() student: Students;
+    @Input() selection: Selections;
     focusStatus = false;
-    selection = {
+   /*  selection = {
         sessionId: 1,
         subjectId: 1,
         termId: 1,
         type: 'exam'
-    };
+    }; */
     typeData = {
         examScore: 0,
         caScore: 0,
