@@ -274,7 +274,6 @@ export class IndexedDbService {
                             cursor.continue();
                         } else {
                             this.dataSaverSwitch( objectStoreName, theData );
-                            return theData;
                         }
                         break;
                     case Operations.getAll:
