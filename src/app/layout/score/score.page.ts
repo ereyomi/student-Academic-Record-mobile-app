@@ -34,10 +34,10 @@ export class ScorePage implements OnInit {
          } ); */
         const payload = {
             ...this.selection,
-            ...this.student,
+            userId: this.student?.userId ?? 0,
             ...this.scoreProcessing( this.selection.type, score ),
-            id: 0,
         };
+        console.log( 'score processing...', score, payload);
         this.db.processAcademicScore( payload );
     }
 

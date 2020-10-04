@@ -1,6 +1,6 @@
 import { Platform } from '@ionic/angular';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { dbBluePrint } from './dbServiceResource/dbBluePrint';
 import { PopulateDBService } from './populate-db.service';
 import { Operations } from 'src/app/enum/operations';
@@ -12,6 +12,7 @@ import { AcademicPayloadModel } from '../models/academic-payload-model';
 } )
 
 export class IndexedDbService {
+    private subscription: Subscription;
     private dbVersion = 1;
     private dbName = 'academicRecord';
 
@@ -242,29 +243,35 @@ export class IndexedDbService {
         const theData: any[] = [];
         openmydb.onsuccess = async () => {
             const dataBase = openmydb.result;
-            const tx = await dataBase.transaction( objectStoreName, 'readwrite' )
-                .objectStore( objectStoreName );
+        /* const tx = await dataBase.transaction( objectStoreName, 'readwrite' )
+            .objectStore( objectStoreName ).openCursor(); */
             let trans: any;
-            switch ( typeOfOperation ) {
-                case Operations.openCursor:
-                    trans = tx.openCursor();
-                    break;
-                case Operations.getAll:
-                    trans = tx.getAll();
-                    break;
-                case Operations.put:
-                    trans = tx.put( passIndata );
-                    break;
-                case Operations.add:
-                    trans = tx.add( { ...passIndata } );
-                    break;
-                default:
-                    break;
+            try {
+                const tx = await dataBase.transaction( objectStoreName, 'readwrite' )
+                    .objectStore( objectStoreName );
+
+                switch ( typeOfOperation ) {
+                    case Operations.openCursor:
+                        trans = tx.openCursor();
+                        break;
+                    case Operations.getAll:
+                        trans = tx.getAll();
+                        break;
+                    case Operations.put:
+                        trans = tx.put( passIndata );
+                        break;
+                    case Operations.add:
+                        trans = tx.add( passIndata );
+                        break;
+                    default:
+                        break;
+                }
+            } catch (error) {
+                console.log( error );
             }
-            /* const tx = await dataBase.transaction( objectStoreName, 'readwrite' )
-                .objectStore( objectStoreName ).openCursor(); */
+
             console.log( 'performing operation' );
-            trans.onsuccess = ( event: any ) => {
+            trans.onsuccess = async ( event: any ) => {
                 switch ( typeOfOperation ) {
                     case Operations.openCursor:
                         const cursor = event.target.result;
@@ -288,7 +295,6 @@ export class IndexedDbService {
                     default:
                         break;
                 }
-                this.dataSaverSwitch( objectStoreName, theData );
 
             };
             trans.onerror = ( error: any ) => {
@@ -309,6 +315,9 @@ export class IndexedDbService {
         }
         return true;
     }
+    async loadDataAgain(objectStore: string, operation: string) {
+        await this.performDatabaseOperation( objectStore, operation);
+    }
     async loadacademicRecordsData() {
         await this.performDatabaseOperation( ObjectStores.academicRecords, Operations.openCursor );
     }
@@ -317,37 +326,51 @@ export class IndexedDbService {
         const queryData = formatIdRelatedToInt( passInPayload );
         const { studentId, sessionId, subjectId, termId, examScore, caScore } = queryData;
         let payloadToSave: AcademicPayloadModel = formatAndpopulateRecord( passInPayload );
-        console.log( payloadToSave );
-        this.academicRecords.subscribe(
-            academicRecords => {
-                console.log( 'academicRecords: ', academicRecords );
-                if ( academicRecords.length === 0 ) {
-                    // insert data
-                    console.log( 'academic record is empty thus am adding this record in as a new one' );
-                    // this.performDatabaseOperation( ObjectStores.academicRecords, Operations.add, payloadToSave );
-                } else {
-                    const checkIfRecordExist = academicRecords.find(
-                        ( data ) => data.studentId === studentId &&
-                            data.sessionId === sessionId && data.subjectId === subjectId
-                            && data.termId === termId
-                    );
-                    if ( typeof checkIfRecordExist === 'undefined' ) {
+        console.log( 'payloadToSave: ', payloadToSave );
+        try {
+            this.subscription = this.academicRecords.subscribe(
+                async ( academicRecords ) => {
+                    console.log( 'academicRecords: ', academicRecords );
+                    if ( academicRecords.length === 0 ) {
                         // insert data
-                        console.log( 'inserting' );
-                        this.performDatabaseOperation( ObjectStores.academicRecords, Operations.add, payloadToSave );
+                        console.log( 'academic record is empty thus am adding this record in as a new one' );
+                        await this.performDatabaseOperation( ObjectStores.academicRecords, Operations.add, payloadToSave );
                     } else {
-                        // update data
-                        const toUpdateRecord: any = {
-                            ...checkIfRecordExist,
-                            examScore,
-                            caScore,
-                        };
-                        payloadToSave = formatAcademicRecordPayload( toUpdateRecord );
-                        this.performDatabaseOperation( ObjectStores.academicRecords, Operations.put, payloadToSave );
-                    }
+                        const checkIfRecordExist = academicRecords.find(
+                            ( data ) => data.studentId === studentId &&
+                                data.sessionId === sessionId && data.subjectId === subjectId
+                                && data.termId === termId
+                        );
+                        try {
+                            if ( typeof checkIfRecordExist === 'undefined' ) {
+                                // insert data
+                                console.log( 'inserting' );
+                                await this.performDatabaseOperation( ObjectStores.academicRecords, Operations.add, payloadToSave );
+                            } else {
+                                // update data
+                                const toUpdateRecord: any = {
+                                    ...checkIfRecordExist,
+                                    examScore,
+                                    caScore,
+                                };
+                                payloadToSave = formatAcademicRecordPayload( toUpdateRecord );
+                                console.log( 'updating data' );
+                                await this.performDatabaseOperation( ObjectStores.academicRecords, Operations.put, payloadToSave );
+                            }
+                        } catch ( error ) {
+                            console.log( 'academic: ', error );
+                        }
 
+                    }
                 }
-            }
-        );
+            );
+            // unsubscribe
+            this.subscription.unsubscribe();
+            // update academic record
+            console.log( 'update Academic record...' );
+            await this.loadacademicRecordsData();
+        } catch (error) {
+            console.log( 'academic record processing error' );
+        }
     }
 }

@@ -42,8 +42,17 @@ export class RecordPagePage implements OnInit {
     ) { }
 
     ngOnInit() {
-        console.log( 'initiate record' );
-        this.db.loadacademicRecordsData();
+        this.db.getDatabaseState().subscribe( async ready => {
+            if ( ready ) {
+                console.log( 'db ready: ', ready );
+                const isDump = await this.db.isDump();
+                console.log( 'aw', isDump );
+                if ( isDump === true ) {
+                    console.log( 'initiate academic record' );
+                    this.db.loadacademicRecordsData();
+                }
+            }
+        } );
     }
 
     myInit() {
