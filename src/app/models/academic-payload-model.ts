@@ -1,4 +1,5 @@
 export interface AcademicPayloadModel {
+    id?: number;
     sessionId: number;
     subjectId: number;
     termId: number;

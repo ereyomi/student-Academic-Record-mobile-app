@@ -25,9 +25,7 @@ export class ScorePage implements OnInit {
 
     constructor( private store: Store<any>, private db: IndexedDbService ) { }
 
-    ngOnInit() {
-        console.log( this.student );
-    }
+    ngOnInit() { }
     onInputIt( event: any ): void {
         const score: number = event.target.value;
         /*  this.store.dispatch( {
@@ -38,8 +36,8 @@ export class ScorePage implements OnInit {
             ...this.selection,
             ...this.student,
             ...this.scoreProcessing( this.selection.type, score ),
+            id: 0,
         };
-        console.log( 'payload: ', payload );
         this.db.processAcademicScore( payload );
     }
 

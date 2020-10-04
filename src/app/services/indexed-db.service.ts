@@ -340,59 +340,35 @@ export class IndexedDbService {
 
     async processAcademicScore( passInPayload: any ) {
         const queryData = formatIdRelatedToInt( passInPayload );
-        console.log( 'queryData: ', queryData );
         const { studentId, sessionId, subjectId, termId, examScore, caScore } = queryData;
+        let payloadToSave: AcademicPayloadModel = formatAcademicRecordPayload( passInPayload );
+        console.log( payloadToSave );
         this.academicRecords.subscribe(
             academicRecords => {
                 if ( academicRecords.length === 0 ) {
                     // insert data
                 } else {
-                    console.log( 'academicRecords: ', academicRecords );
                     const checkIfRecordExist = academicRecords.find(
                         ( data ) => data.studentId === studentId &&
                             data.sessionId === sessionId && data.subjectId === subjectId
                             && data.termId === termId
                     );
                     if ( typeof checkIfRecordExist === 'undefined' ) {
-                        console.log( 'hmmm I didnt get any data' );
                         // insert data
+                        // this.performDatabaseOperation(ObjectStores.academicRecords, Operations.add, )
                     } else {
-                        console.log( 'do you get a data: ', checkIfRecordExist );
                         // update data
                         const toUpdateRecord: any = {
                             ...checkIfRecordExist,
                             examScore,
                             caScore,
                         };
-                        const payloadToSave: AcademicPayloadModel = formatAcademicRecordPayload( toUpdateRecord );
-                        console.log( 'toUpdateRecord: ', toUpdateRecord, 'payloadToSave: ', payloadToSave );
+                        payloadToSave = formatAcademicRecordPayload( toUpdateRecord );
                         this.performDatabaseOperation( ObjectStores.academicRecords, Operations.put, payloadToSave );
                     }
 
                 }
             }
         );
-    }
-
-    async insertStudentAcademicReport( data: {} ) {
-        this.openDb();
-        const openmydb = this.indexedDatabase;
-        const objectStoreName = 'academic_report';
-        openmydb.onsuccess = () => {
-            const dataBase = openmydb.result;
-            return new Promise( async ( resolve, reject ) => {
-                const tx = await dataBase.transaction( objectStoreName, 'readwrite' )
-                    .objectStore( objectStoreName ).add( { id: this.createUUID(), ...data } );
-                tx.onsuccess = ( event: any ) => {
-                    const txSuccess = event.target.result;
-                    console.log( txSuccess );
-                };
-                tx.onerror = () => {
-                    console.log( 'error while trying to insert academic record' );
-                };
-
-            } );
-        };
-
     }
 }

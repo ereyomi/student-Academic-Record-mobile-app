@@ -1,3 +1,5 @@
+import { AcademicPayloadModel } from '../models/academic-payload-model';
+
 const baseTen = 10; // for radix (check documentation)
 
 export const formatAcademicRecordPayload
@@ -16,7 +18,7 @@ export const formatAcademicRecordPayload
         approvedBy,
         createdAt,
         updatedAt
-    } ) => {
+    } ): AcademicPayloadModel => {
         const theStudentId = isNaN( studentId ) ? ( isNaN( userId ) ? 0 : userId) : studentId;
         return {
             id,
@@ -58,3 +60,18 @@ export const formatIdRelatedToInt
 
     };
 
+const formatAndpopulateRecord = ( record: any ): AcademicPayloadModel => {
+    const { studentId, userId } = record;
+    const theStudentId = isNaN( studentId ) ? ( isNaN( userId ) ? 0 : userId ) : studentId;
+    record = {
+        ...record,
+        remark: 'by teacher',
+        offlineStatus: false,
+        addedBy: theStudentId,
+        approvedBy: 0,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+    };
+
+    return formatAcademicRecordPayload( record);
+}
