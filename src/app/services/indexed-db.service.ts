@@ -1,18 +1,16 @@
 import { Platform } from '@ionic/angular';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { dbBluePrint } from './dbServiceResource/dbBluePrint';
 import { PopulateDBService } from './populate-db.service';
 import { Operations } from 'src/app/enum/operations';
 import { ObjectStores } from 'src/app/enum/objectStores';
-import { createUUID, formatAcademicRecordPayload, formatAndpopulateRecord, formatIdRelatedToInt } from '../helpers/academic-record-helper';
-import { AcademicPayloadModel } from '../models/academic-payload-model';
+import { createUUID } from '../helpers/academic-record-helper';
 @Injectable( {
     providedIn: 'root'
 } )
 
 export class IndexedDbService {
-    private subscription: Subscription;
     private dbVersion = 1;
     private dbName = 'academicRecord';
 
@@ -322,55 +320,4 @@ export class IndexedDbService {
         await this.performDatabaseOperation( ObjectStores.academicRecords, Operations.openCursor );
     }
 
-    async processAcademicScore( passInPayload: any ) {
-        const queryData = formatIdRelatedToInt( passInPayload );
-        const { studentId, sessionId, subjectId, termId, examScore, caScore } = queryData;
-        let payloadToSave: AcademicPayloadModel = formatAndpopulateRecord( passInPayload );
-        console.log( 'payloadToSave: ', payloadToSave );
-        try {
-            this.subscription = this.academicRecords.subscribe(
-                async ( academicRecords ) => {
-                    console.log( 'academicRecords: ', academicRecords );
-                    if ( academicRecords.length === 0 ) {
-                        // insert data
-                        console.log( 'academic record is empty thus am adding this record in as a new one' );
-                        await this.performDatabaseOperation( ObjectStores.academicRecords, Operations.add, payloadToSave );
-                    } else {
-                        const checkIfRecordExist = academicRecords.find(
-                            ( data ) => data.studentId === studentId &&
-                                data.sessionId === sessionId && data.subjectId === subjectId
-                                && data.termId === termId
-                        );
-                        try {
-                            if ( typeof checkIfRecordExist === 'undefined' ) {
-                                // insert data
-                                console.log( 'inserting' );
-                                await this.performDatabaseOperation( ObjectStores.academicRecords, Operations.add, payloadToSave );
-                            } else {
-                                // update data
-                                const toUpdateRecord: any = {
-                                    ...checkIfRecordExist,
-                                    examScore,
-                                    caScore,
-                                };
-                                payloadToSave = formatAcademicRecordPayload( toUpdateRecord );
-                                console.log( 'updating data' );
-                                await this.performDatabaseOperation( ObjectStores.academicRecords, Operations.put, payloadToSave );
-                            }
-                        } catch ( error ) {
-                            console.log( 'academic: ', error );
-                        }
-
-                    }
-                }
-            );
-            // unsubscribe
-            this.subscription.unsubscribe();
-            // update academic record
-            console.log( 'update Academic record...' );
-            await this.loadacademicRecordsData();
-        } catch (error) {
-            console.log( 'academic record processing error' );
-        }
-    }
 }

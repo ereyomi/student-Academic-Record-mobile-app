@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Students } from 'src/app/models/students';
-import { IndexedDbService } from 'src/app/services/indexed-db.service';
+import { AppService } from 'src/app/services/app.service';
 
 
 @Component( {
@@ -23,7 +23,7 @@ export class ScorePage implements OnInit {
         caScore: 0,
     };
 
-    constructor( private store: Store<any>, private db: IndexedDbService ) { }
+    constructor( private store: Store<any>, private appS: AppService ) { }
 
     ngOnInit() { }
     onInputIt( event: any ): void {
@@ -38,7 +38,7 @@ export class ScorePage implements OnInit {
             ...this.scoreProcessing( this.selection.type, score ),
         };
         console.log( 'score processing...', score, payload);
-        this.db.processAcademicScore( payload );
+        this.appS.processAcademicScore( payload );
     }
 
     onFocusIt() {
