@@ -5,7 +5,7 @@ import { dbBluePrint } from './dbServiceResource/dbBluePrint';
 import { PopulateDBService } from './populate-db.service';
 import { Operations } from 'src/app/enum/operations';
 import { ObjectStores } from 'src/app/enum/objectStores';
-import { formatAcademicRecordPayload, formatAndpopulateRecord, formatIdRelatedToInt } from '../helpers/academic-record-helper';
+import { createUUID, formatAcademicRecordPayload, formatAndpopulateRecord, formatIdRelatedToInt } from '../helpers/academic-record-helper';
 import { AcademicPayloadModel } from '../models/academic-payload-model';
 @Injectable( {
     providedIn: 'root'
@@ -149,17 +149,6 @@ export class IndexedDbService {
         } );
     }
 
-    createUUID() {
-        let dt = new Date().getTime();
-        const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace( /[xy]/g, ( char ) => {
-            dt = Math.floor( dt / 16 );
-            // tslint:disable-next-line:no-bitwise
-            const r = ( dt + Math.random() * 16 ) % 16 | 0;
-            // tslint:disable-next-line:no-bitwise
-            return ( char === 'x' ? r : ( r & 0x3 | 0x8 ) ).toString( 16 );
-        } );
-        return uuid;
-    }
     async multipleInsert( data: any ) {
         /* myfileindex is and array of object --
           k = [{fileindex: 'me', unique: true}, {fileindex: 'hmmm', unique: false}];
@@ -175,7 +164,7 @@ export class IndexedDbService {
                     const tx = dataBase.transaction( objectStoreName, 'readwrite' );
                     const store = tx.objectStore( objectStoreName );
                     for ( const toSaveData of toDumpData ) {
-                        const inserting = await store.add( { id: this.createUUID(), ...toSaveData } );
+                        const inserting = await store.add( { id: createUUID(), ...toSaveData } );
                         inserting.onsuccess = () => console.log( 'insert result success', objectStoreName );
                         inserting.onerror = ( e: any ) => console.log( e );
                     }
