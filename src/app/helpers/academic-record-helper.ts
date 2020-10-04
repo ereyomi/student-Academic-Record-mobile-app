@@ -60,7 +60,7 @@ export const formatIdRelatedToInt
 
     };
 
-const formatAndpopulateRecord = ( record: any ): AcademicPayloadModel => {
+export const formatAndpopulateRecord = ( record: any ): AcademicPayloadModel => {
     const { studentId, userId } = record;
     const theStudentId = isNaN( studentId ) ? ( isNaN( userId ) ? 0 : userId ) : studentId;
     record = {
@@ -74,4 +74,15 @@ const formatAndpopulateRecord = ( record: any ): AcademicPayloadModel => {
     };
 
     return formatAcademicRecordPayload( record);
-}
+};
+export const todayDateInUTC = () => {
+    const tDate: Date = new Date();
+    const utcDate = tDate.toUTCString();
+    return utcDate;
+};
+
+export const todayDateInISO = () => {
+    const tDate: Date = new Date();
+    const isoDate = tDate.toISOString();
+    return isoDate;
+};
