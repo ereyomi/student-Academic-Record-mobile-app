@@ -148,19 +148,6 @@ export class IndexedDbService {
             };
         } );
     }
-    getStoreIndexedDb( objectStoreName: string, passedInDatabase: any = this.indexedDatabase ) {
-        // table is same as objectStore
-        const database: any = {};
-        /* if (this.DB) {
-          passedInDatabase = this.DB;
-        } */
-        database.db = passedInDatabase.result;
-        database.tx = database.db.transaction( objectStoreName, 'readwrite' );
-        database.store = database.tx.objectStore( objectStoreName );
-        /* this is not need as there might be multiple fileindex (column -mysql) */
-        // database.index = database.store.index(fileindex);
-        return database;
-    }
 
     createUUID() {
         let dt = new Date().getTime();
@@ -280,7 +267,7 @@ export class IndexedDbService {
                     trans = tx.put( passIndata );
                     break;
                 case Operations.add:
-                    trans = tx.add( { id: this.createUUID(), ...passIndata } );
+                    trans = tx.add( { ...passIndata } );
                     break;
                 default:
                     break;
@@ -345,8 +332,11 @@ export class IndexedDbService {
         console.log( payloadToSave );
         this.academicRecords.subscribe(
             academicRecords => {
+                console.log( 'academicRecords: ', academicRecords );
                 if ( academicRecords.length === 0 ) {
                     // insert data
+                    console.log( 'academic record is empty thus am adding this record in as a new one' );
+                    // this.performDatabaseOperation( ObjectStores.academicRecords, Operations.add, payloadToSave );
                 } else {
                     const checkIfRecordExist = academicRecords.find(
                         ( data ) => data.studentId === studentId &&
@@ -355,7 +345,8 @@ export class IndexedDbService {
                     );
                     if ( typeof checkIfRecordExist === 'undefined' ) {
                         // insert data
-                        // this.performDatabaseOperation(ObjectStores.academicRecords, Operations.add, )
+                        console.log( 'inserting' );
+                        this.performDatabaseOperation( ObjectStores.academicRecords, Operations.add, payloadToSave );
                     } else {
                         // update data
                         const toUpdateRecord: any = {
