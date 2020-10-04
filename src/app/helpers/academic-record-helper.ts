@@ -32,7 +32,7 @@ export const formatAcademicRecordPayload
         createdAt,
         updatedAt
     } ): AcademicPayloadModel => {
-        const theStudentId = studentId ?? (userId ?? 0 );
+        const theStudentId = studentId ?? ( userId ?? 0 );
         return {
             id,
             sessionId: parseInt( sessionId, baseTen ),
@@ -84,8 +84,8 @@ export const formatAndpopulateRecord = ( record: any ): AcademicPayloadModel => 
         offlineStatus: false,
         addedBy: theStudentId,
         approvedBy: 0,
-        createdAt: todayDateInUTC(),
-        updatedAt: todayDateInUTC(),
+        createdAt: todayDateInISO(),
+        updatedAt: todayDateInISO(),
     };
 
     return formatAcademicRecordPayload( record );
