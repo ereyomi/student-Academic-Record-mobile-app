@@ -32,7 +32,7 @@ export const formatAcademicRecordPayload
         createdAt,
         updatedAt
     } ): AcademicPayloadModel => {
-        const theStudentId = isNaN( studentId ) ? ( isNaN( userId ) ? 0 : userId ) : studentId;
+        const theStudentId = studentId ?? (userId ?? 0 );
         return {
             id,
             sessionId: parseInt( sessionId, baseTen ),
@@ -75,7 +75,7 @@ export const formatIdRelatedToInt
 
 export const formatAndpopulateRecord = ( record: any ): AcademicPayloadModel => {
     const { studentId, userId } = record;
-    const theStudentId = isNaN( studentId ) ? ( isNaN( userId ) ? 0 : userId ) : studentId;
+    const theStudentId = studentId ?? ( userId ?? 0 );
 
     record = {
         ...record,
