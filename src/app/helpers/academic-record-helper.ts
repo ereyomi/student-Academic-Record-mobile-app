@@ -4,19 +4,19 @@ const baseTen = 10; // for radix (check documentation)
 
 export const createUUID = () => {
     let dt = new Date().getTime();
-    const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace( /[xy]/g, ( char ) => {
-        dt = Math.floor( dt / 16 );
+    const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (char) => {
+        dt = Math.floor(dt / 16);
         // tslint:disable-next-line:no-bitwise
-        const r = ( dt + Math.random() * 16 ) % 16 | 0;
+        const r = (dt + Math.random() * 16) % 16 | 0;
         // tslint:disable-next-line:no-bitwise
-        return ( char === 'x' ? r : ( r & 0x3 | 0x8 ) ).toString( 16 );
-    } );
+        return (char === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
     return uuid;
 };
 
 
 export const formatAcademicRecordPayload
-    = ( {
+    = ({
         id,
         sessionId,
         subjectId,
@@ -31,20 +31,20 @@ export const formatAcademicRecordPayload
         approvedBy,
         createdAt,
         updatedAt
-    } ): AcademicPayloadModel => {
-        const theStudentId = studentId ?? ( userId ?? 0 );
+    }): AcademicPayloadModel => {
+        const theStudentId = studentId ?? (userId ?? 0);
         return {
             id,
-            sessionId: parseInt( sessionId, baseTen ),
-            subjectId: parseInt( subjectId, baseTen ),
-            termId: parseInt( termId, baseTen ),
-            studentId: parseInt( theStudentId, baseTen ),
-            caScore: parseInt( caScore, baseTen ),
-            examScore: parseInt( examScore, baseTen ),
+            sessionId: parseInt(sessionId, baseTen),
+            subjectId: parseInt(subjectId, baseTen),
+            termId: parseInt(termId, baseTen),
+            studentId: parseInt(theStudentId, baseTen),
+            caScore: parseInt(caScore, baseTen),
+            examScore: parseInt(examScore, baseTen),
             remark,
             offlineStatus,
-            addedBy: parseInt( addedBy, baseTen ),
-            approvedBy: parseInt( approvedBy, baseTen ),
+            addedBy: parseInt(addedBy, baseTen),
+            approvedBy: parseInt(approvedBy, baseTen),
             createdAt,
             updatedAt
 
@@ -53,29 +53,29 @@ export const formatAcademicRecordPayload
     };
 
 export const formatIdRelatedToInt
-    = ( {
+    = ({
         sessionId,
         subjectId,
         termId,
         userId,
         caScore,
         examScore,
-    } ) => {
+    }) => {
         return {
-            sessionId: parseInt( sessionId, baseTen ),
-            subjectId: parseInt( subjectId, baseTen ),
-            termId: parseInt( termId, baseTen ),
-            userId: parseInt( userId, baseTen ),
-            studentId: parseInt( userId, baseTen ),
-            caScore: parseInt( caScore, baseTen ),
-            examScore: parseInt( examScore, baseTen ),
+            sessionId: parseInt(sessionId, baseTen),
+            subjectId: parseInt(subjectId, baseTen),
+            termId: parseInt(termId, baseTen),
+            userId: parseInt(userId, baseTen),
+            studentId: parseInt(userId, baseTen),
+            caScore: parseInt(caScore, baseTen),
+            examScore: parseInt(examScore, baseTen),
         };
 
     };
 
-export const formatAndpopulateRecord = ( record: any ): AcademicPayloadModel => {
+export const formatAndpopulateRecord = (record: any): AcademicPayloadModel => {
     const { studentId, userId } = record;
-    const theStudentId = studentId ?? ( userId ?? 0 );
+    const theStudentId = studentId ?? (userId ?? 0);
 
     record = {
         ...record,
@@ -88,7 +88,7 @@ export const formatAndpopulateRecord = ( record: any ): AcademicPayloadModel => 
         updatedAt: todayDateInISO(),
     };
 
-    return formatAcademicRecordPayload( record );
+    return formatAcademicRecordPayload(record);
 };
 export const todayDateInUTC = () => {
     const tDate: Date = new Date();

@@ -32,9 +32,9 @@
 </ion-header>
 
 <ion-content>
-    <div class="custom-body">
+    <div class="custom-body" *ngIf="academicReports$ | async as academicReports">
         <form class="custom-sm">
-            <app-score [selection]="appSelection" [student]="student" *ngFor="let student of students"></app-score>
+            <app-score [selection]="appSelection" [student]="student" [academicReports]="academicReports" *ngFor="let student of students"></app-score>
         </form>
     </div>
     <ion-fab vertical="bottom" horizontal="end" edge slot="fixed">

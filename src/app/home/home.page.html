@@ -1,8 +1,8 @@
 <ion-header class="ion-no-border myHeader">
-    <ion-toolbar class="intro">
+    <ion-toolbar class="intro"><!-- 
         <ion-title size="small" class="sm-title" color="primary">
             Hello,
-        </ion-title>
+        </ion-title> -->
         <ion-title size="large" color="primary">
             Ereyomi
         </ion-title>
@@ -33,7 +33,7 @@
     <ion-grid>
         <ion-row>
             <ion-col>
-                <ion-card (click)="loadSelectForExam()">
+                <ion-card (click)="loadTo()">
                     <ion-card-header>
                         <ion-card-title>
                             <ion-icon name="albums"></ion-icon>
@@ -46,7 +46,7 @@
                 </ion-card>
             </ion-col>
             <ion-col>
-                <ion-card>
+                <ion-card (click)="loadTo('ca')">
                     <ion-card-header>
                         <ion-card-title>
                             <ion-icon name="book"></ion-icon>
@@ -62,7 +62,7 @@
 
         <ion-row>
             <ion-col>
-                <ion-card (click)="loadSelectForExam('viewSubjectResult')">
+                <ion-card (click)="loadTo('viewSubjectResult')">
                     <ion-card-header>
                         <ion-card-title color="secondary">
                             <ion-icon name="create"></ion-icon>

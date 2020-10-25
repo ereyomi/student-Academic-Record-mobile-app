@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { AppService } from 'src/app/services/app.service';
+import { IndexedDbService } from 'src/app/services/indexed-db.service';
 
 @Component({
   selector: 'app-view-result',
@@ -8,10 +10,10 @@ import { AppService } from 'src/app/services/app.service';
 })
 export class ViewResultPage implements OnInit {
 
-  constructor(private appS: AppService) { }
+  academicReports$: Observable<any> = this.appS.academicRecordsBySelection;
+  studentsData$: Observable<any> = this.db.getStudents();
+  constructor(private appS: AppService, private db: IndexedDbService) { }
 
-  ngOnInit() {
-    // this.appS.loadAcademicRecordsBySelection();
-  }
+  ngOnInit() {}
 
 }

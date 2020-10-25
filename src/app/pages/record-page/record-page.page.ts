@@ -3,6 +3,7 @@ import { AppService } from 'src/app/services/app.service';
 import { NavController } from '@ionic/angular';
 import { IndexedDbService } from 'src/app/services/indexed-db.service';
 import { Selections } from 'src/app/models/selections';
+import { Observable } from 'rxjs';
 
 @Component( {
     selector: 'app-record-page',
@@ -10,6 +11,8 @@ import { Selections } from 'src/app/models/selections';
     styleUrls: [ './record-page.page.scss' ],
 } )
 export class RecordPagePage implements OnInit {
+
+    academicReports$: Observable<any> = this.appS.academicRecordsBySelection;
     notAvailable = 0;
     appSelection: any;
     students: any[];
@@ -62,15 +65,12 @@ export class RecordPagePage implements OnInit {
 
     myInit() {
         this.appS.getSelctionOptions().subscribe( appDataSelection => {
-            console.log( appDataSelection );
             const getObjectAvailability = Object.entries( appDataSelection ).length;
-            console.log( getObjectAvailability );
             if ( getObjectAvailability === this.notAvailable ) {
                 this.goBackHome();
             } else {
                 this.appSelection = appDataSelection;
                 this.db.getStudents().subscribe( students => {
-                    console.log( 'Recording for this students: ', students );
                     if ( students.length !== 0 ) {
                         this.students = students;
                     } else {

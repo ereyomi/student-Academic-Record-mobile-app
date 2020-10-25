@@ -71,12 +71,10 @@ export class IndexedDbService {
             }
         };
         this.indexedDatabase.onsuccess = () => {
-            console.log( 'database created' );
             this.getSessionsTermsAndSubjects();
             this.dbReady.next( true );
         };
         this.indexedDatabase.onerror = () => {
-            console.log( 'database error' );
             return;
         };
     }
@@ -138,13 +136,10 @@ export class IndexedDbService {
                     const cursor = event.target.result;
                     if ( cursor ) {
                         // cursor.continue();
-                        console.log( cursor.value.status );
                         resolve( cursor.value.status );
                     }
                 };
-                tx.onerror = () => {
-                    console.log( 'isDump.error' );
-                };
+                tx.onerror = () => {};
             };
         } );
     }
@@ -200,38 +195,8 @@ export class IndexedDbService {
                 } )
             )
                 .then( dataa => {
-                    console.log( dataa );
                     this.selection.next( dataa );
                 } );
-        };
-
-    }
-    async loadStudents() {
-        this.openDb();
-        const openmydb = this.indexedDatabase;
-        const objectStoreName = 'students';
-        openmydb.onsuccess = () => {
-            const dataBase = openmydb.result;
-            return new Promise( async ( resolve, reject ) => {
-                const toSendData: any[] = [];
-                const tx = await dataBase.transaction( objectStoreName, 'readwrite' )
-                    .objectStore( objectStoreName ).openCursor();
-                tx.onsuccess = ( event: any ) => {
-                    const cursor = event.target.result;
-                    if ( cursor ) {
-                        console.log( cursor.value );
-                        toSendData.push( cursor.value );
-                        cursor.continue();
-                    } else {
-                        console.log( 'studnets', toSendData );
-                        this.students.next( toSendData );
-                        resolve( toSendData );
-                    }
-                };
-                tx.onerror = () => {
-                    console.log( 'txyghv.result' );
-                };
-            } );
         };
 
     }
@@ -275,7 +240,6 @@ export class IndexedDbService {
                     case Operations.openCursor:
                         const cursor = event.target.result;
                         if ( cursor ) {
-                            console.log( cursor.value );
                             theData.push( cursor.value );
                             cursor.continue();
                         } else {
@@ -313,6 +277,10 @@ export class IndexedDbService {
                 break;
         }
         return true;
+    }
+
+    async loadStudents() {
+        this.performDatabaseOperation(ObjectStores.students, Operations.openCursor);
     }
     async loadDataAgain(objectStore: string, operation: string) {
         await this.performDatabaseOperation( objectStore, operation);

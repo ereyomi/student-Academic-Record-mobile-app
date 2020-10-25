@@ -19,5 +19,13 @@
 </ion-header>
 
 <ion-content>
-  
+  <div *ngIf="studentsData$ | async as studentsData">
+    <ion-grid *ngIf="academicReports$ | async as academicReports">
+      <ion-row *ngFor="let academicReport of academicReports" class="ion-no-padding">
+        <ion-col>
+          <app-view [academicRecord]="academicReport" [studentsData]="studentsData"></app-view>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 </ion-content>

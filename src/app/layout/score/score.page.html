@@ -13,6 +13,7 @@
             </ion-col>
             <ion-col size="5">
                 <ion-input 
+                [(ngModel)]="score"
                 [ngClass]="{focusIt: focusStatus}"
                 (ionFocus)="onFocusIt()"
                 (ionBlur)="onBlurIt()"
@@ -21,7 +22,8 @@
                 type="number"
                 inputmode="numeric"
                 debounce="2500"
-                (ionChange)="onInputIt($event)"></ion-input>
+                (ionChange)="onInputIt($event)"
+                ></ion-input>
             </ion-col>
         </ion-row>
     </ion-grid>

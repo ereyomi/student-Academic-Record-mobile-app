@@ -1,34 +1,47 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Store, select } from '@ngrx/store';
+import { formatIdRelatedToInt, formatSelectionToInt } from 'src/app/helpers/academic-record-helper';
 import { Selections } from 'src/app/models/selections';
 import { Students } from 'src/app/models/students';
 import { AppService } from 'src/app/services/app.service';
 
 
-@Component( {
+@Component({
     selector: 'app-score',
     templateUrl: './score.page.html',
-    styleUrls: [ './score.page.scss' ],
-} )
+    styleUrls: ['./score.page.scss'],
+})
 export class ScorePage implements OnInit {
+    score = 0;
+    @Input() academicReports: any;
     @Input() student: Students;
     @Input() selection: Selections;
     focusStatus = false;
-   /*  selection = {
-        sessionId: 1,
-        subjectId: 1,
-        termId: 1,
-        type: 'exam'
-    }; */
+    /*  selection = {
+         sessionId: 1,
+         subjectId: 1,
+         termId: 1,
+         type: 'exam'
+     }; */
     typeData = {
         examScore: 0,
         caScore: 0,
     };
 
-    constructor( private store: Store<any>, private appS: AppService ) { }
+    constructor(private store: Store<any>, private appS: AppService) { }
 
-    ngOnInit() { }
-    onInputIt( event: any ): void {
+    ngOnInit() {
+        try {
+            this.getPreviousScoreIfExist();
+            if (this.selection.type === 'exam') {
+                this.score = this.typeData.examScore;
+            } else {
+                this.score = this.typeData.caScore;
+            }
+            console.log('score: ', this.score);
+        } catch (error) { }
+    }
+    onInputIt(event: any): void {
         const score: number = event.target.value;
         /*  this.store.dispatch( {
              type: 'UPDATE_SCORE',
@@ -37,10 +50,10 @@ export class ScorePage implements OnInit {
         const payload = {
             ...this.selection,
             userId: this.student?.userId ?? 0,
-            ...this.scoreProcessing( this.selection.type, score ),
+            ...this.scoreProcessing(this.selection.type, score),
         };
-        console.log( 'score processing...', score, payload);
-        this.appS.processAcademicScore( payload );
+        console.log('score processing...', score, payload);
+        this.appS.processAcademicScore(payload);
     }
 
     onFocusIt() {
@@ -56,8 +69,8 @@ export class ScorePage implements OnInit {
             }
         } ); */
     }
-    scoreProcessing( type: string, score: any ) {
-        switch ( type ) {
+    scoreProcessing(type: string, score: any) {
+        switch (type) {
             case 'exam':
                 this.typeData.examScore = score;
                 break;
@@ -68,6 +81,33 @@ export class ScorePage implements OnInit {
                 break;
         }
         return this.typeData;
+    }
+
+    getPreviousScoreIfExist() {
+        const selectionFormatToint = formatSelectionToInt(this.selection);
+        const checkIfRecordExist = this.academicReports.find(
+            (data:
+                {
+                    studentId: number; sessionId: number; subjectId: number; termId: number;
+                }
+            ) => data.studentId === this.student.userId &&
+            data.sessionId === selectionFormatToint.sessionId && data.subjectId === selectionFormatToint.subjectId
+                && data.termId === selectionFormatToint.termId
+        );
+
+        if (typeof checkIfRecordExist !== 'undefined') {
+            if (checkIfRecordExist.examScore !== '' ||
+                typeof checkIfRecordExist.examScore !== null ||
+                typeof checkIfRecordExist.examScore !== 'undefined') {
+                this.typeData.examScore = checkIfRecordExist.examScore;
+            }
+            if (checkIfRecordExist.caScore !== '' ||
+                typeof checkIfRecordExist.caScore !== null ||
+                typeof checkIfRecordExist.caScore !== 'undefined') {
+                this.typeData.caScore = checkIfRecordExist.caScore;
+            }
+        }
+        console.log('this.typeData: ', this.typeData, checkIfRecordExist);
     }
 
 }

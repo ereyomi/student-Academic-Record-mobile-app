@@ -48,18 +48,15 @@ export class SelectPagePage implements OnInit {
         this.initForm();
         this.route.data.subscribe(
             resolve => {
-                console.log( resolve );
                 const { data } = resolve;
                 const { selections, type } = data;
                 this.selectionType = type;
-                console.log( 'selectionType: ', this.selectionType );
                 if ( typeof selections === 'undefined' || typeof selections === null || selections.length === 0 ) {
                     this.navCtrl.navigateBack( 'home' );
                 } else {
                     this.sessions = this.filterResolvedData( selections, this.selections.sessionsFilter );
                     this.terms = this.filterResolvedData( selections, this.selections.termsFilter );
                     this.subjects = this.filterResolvedData( selections, this.selections.subjectsFilter );
-                    console.log( this.sessions, this.terms, this.subjects );
                 }
 
             },
@@ -102,7 +99,7 @@ export class SelectPagePage implements OnInit {
         }
     }
 
-    async loadSelectForExam() {
+    async loadSelection() {
 
         const loading = await this.loadingController.create( {
             spinner: 'crescent',
@@ -112,6 +109,12 @@ export class SelectPagePage implements OnInit {
             cssClass: 'custom-class custom-loading'
         } );
         await loading.present();
+
+        // push selection to appService
+        const appServiceData: Selections = {
+            type: this.selectionType,
+            ...this.selectionForm.value
+        };
         this.db.getDatabaseState().subscribe( async ready => {
             if ( ready ) {
                 const isDump = await this.db.isDump();
@@ -119,13 +122,8 @@ export class SelectPagePage implements OnInit {
                     // load students data
                     try {
                         await this.db.loadStudents();
-                        // push selection to appService
-                        const appServiceData: Selections = {
-                            type: this.selectionType,
-                            ...this.selectionForm.value
-                        };
-                        console.log( appServiceData );
-                        this.appS.selectOptions.next( appServiceData );
+                        await this.appS.loadAcademicRecordsBySelection(appServiceData);
+                        this.appS.selectOptions.next(appServiceData);
                     } catch ( error ) {
 
                     }

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { NavController } from '@ionic/angular';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { ObjectStores } from '../enum/objectStores';
 import { Operations } from '../enum/operations';
@@ -13,11 +14,15 @@ import { IndexedDbService } from './indexed-db.service';
 export class AppService {
     private subscription: Subscription;
     public selectOptions = new BehaviorSubject({});
-    constructor(private db: IndexedDbService) { }
+
+    public academicRecordsBySelection: BehaviorSubject<any[]> = new BehaviorSubject([]);
+    constructor(private db: IndexedDbService, private navCtrl: NavController) { }
     getSelctionOptions(): Observable<{}> {
         return this.selectOptions.asObservable();
     }
-
+    goBackHome() {
+        this.navCtrl.navigateBack('home');
+    }
     async processAcademicScore(passInPayload: any) {
         const queryData = formatIdRelatedToInt(passInPayload);
         const { studentId, sessionId, subjectId, termId, examScore, caScore } = queryData;
@@ -25,7 +30,6 @@ export class AppService {
         try {
             this.subscription = this.db.getAcademicReports().subscribe(
                 async (academicRecords) => {
-                    console.log('academicRecords: ', academicRecords);
                     if (academicRecords.length === 0) {
                         // insert data ::: on error -> academic record is empty thus am adding this record in as a new one
                         await this.db.performDatabaseOperation(ObjectStores.academicRecords, Operations.add, payloadToSave);
@@ -46,6 +50,7 @@ export class AppService {
                                     examScore,
                                     caScore,
                                 };
+                                console.log('toUpdateRecord:', toUpdateRecord);
                                 payloadToSave = formatAcademicRecordPayload(toUpdateRecord);
                                 await this.db.performDatabaseOperation(ObjectStores.academicRecords, Operations.put, payloadToSave);
                             }
@@ -65,26 +70,29 @@ export class AppService {
         }
     }
 
-    async loadAcademicRecordsBySelection(selctions: Selections) {
+    async loadAcademicRecordsBySelection(selctions: any) {
         const formatedSelection = formatSelectionToInt(selctions);
         const { sessionId, subjectId, termId } = formatedSelection;
         console.log('loadAcademicRecordsBySelection');
         try {
             this.subscription = this.db.getAcademicReports().subscribe(
                 async (academicRecords) => {
-                    console.log('academicRecords: ', academicRecords);
                     if (academicRecords.length === 0) {
                         // tell users that they have no academic record
+                        console.log('acadea: ', academicRecords);
                     } else {
-                        const checkIfRecordExist = academicRecords.find(
+                        const checkIfRecordExist = academicRecords.filter(
                             (data) => data.sessionId === sessionId && data.subjectId === subjectId
                                 && data.termId === termId
                         );
                         try {
-                            if (typeof checkIfRecordExist === 'undefined') {
+                            if (checkIfRecordExist.length === 0) {
                                 // tell user to contact admin
+                                console.log('null: ', checkIfRecordExist);
                             } else {
                                 // pass data academics by selection observable
+
+                                this.academicRecordsBySelection.next(checkIfRecordExist);
                             }
                         } catch (error) {
                         }

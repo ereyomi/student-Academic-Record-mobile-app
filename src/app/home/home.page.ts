@@ -16,7 +16,7 @@ export class HomePage implements OnInit {
         this.router.navigateByUrl( `/select/${ routeTo }` );
     }
     ngOnInit() {}
-    async loadSelectForExam( routeToOption: string = 'exam') {
+    async loadTo( routeToOption: string = 'exam') {
         const loading = await this.loadingController.create( {
             spinner: 'crescent',
             // duration: 2000,
@@ -41,7 +41,6 @@ export class HomePage implements OnInit {
         } );
 
         const { role, data } = await loading.onDidDismiss();
-        console.log( 'Loading dismissed with role:', role, data );
         this.openDetails( routeToOption );
 
     }
