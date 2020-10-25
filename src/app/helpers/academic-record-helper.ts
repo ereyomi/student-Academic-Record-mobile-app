@@ -101,3 +101,15 @@ export const todayDateInISO = () => {
     const isoDate = tDate.toISOString();
     return isoDate;
 };
+
+export const formatSelectionToInt = ({
+    sessionId,
+    subjectId,
+    termId,
+}) => {
+    return {
+        sessionId: parseInt(sessionId, baseTen),
+        subjectId: parseInt(subjectId, baseTen),
+        termId: parseInt(termId, baseTen),
+    };
+};

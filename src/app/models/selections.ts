@@ -1,6 +1,6 @@
 export interface Selections {
-    sessionSelection: string;
-    subjectSelection: string;
-    termSelection: string;
-    type: string;
+    sessionId: string;
+    subjectId: string;
+    termId: string;
+    type?: string;
 }
