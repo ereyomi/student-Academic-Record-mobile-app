@@ -13,15 +13,24 @@ import { Selections } from 'src/app/models/selections';
 } )
 export class SelectPagePage implements OnInit {
 
+    selections = {
+        sessionsFilter: 'sessions',
+        termsFilter: 'terms',
+        subjectsFilter: 'subjects',
+        viewSubjectResult: 'viewSubjectResult',
+    };
+    selectionsId = {
+        sessionId: 'sessionId',
+        termId: 'termId',
+        subjectId: 'subjectId',
+    };
     selectionForm: FormGroup;
+
     sessions: any[];
-    sessionsFilter = 'sessions';
 
     terms: any[];
-    termsFilter = 'terms';
 
     subjects: any[];
-    subjectsFilter = 'subjects';
 
     selectionType: string;
 
@@ -43,12 +52,13 @@ export class SelectPagePage implements OnInit {
                 const { data } = resolve;
                 const { selections, type } = data;
                 this.selectionType = type;
+                console.log( 'selectionType: ', this.selectionType );
                 if ( typeof selections === 'undefined' || typeof selections === null || selections.length === 0 ) {
                     this.navCtrl.navigateBack( 'home' );
                 } else {
-                    this.sessions = this.filterResolvedData( selections, this.sessionsFilter );
-                    this.terms = this.filterResolvedData( selections, this.termsFilter );
-                    this.subjects = this.filterResolvedData( selections, this.subjectsFilter );
+                    this.sessions = this.filterResolvedData( selections, this.selections.sessionsFilter );
+                    this.terms = this.filterResolvedData( selections, this.selections.termsFilter );
+                    this.subjects = this.filterResolvedData( selections, this.selections.subjectsFilter );
                     console.log( this.sessions, this.terms, this.subjects );
                 }
 
@@ -72,14 +82,14 @@ export class SelectPagePage implements OnInit {
         );
         let sortBy = '';
         switch ( filter ) {
-            case this.sessionsFilter:
-                sortBy = 'sessionId';
+            case this.selections.sessionsFilter:
+                sortBy = this.selectionsId.sessionId;
                 break;
-            case this.termsFilter:
-                sortBy = 'termId';
+            case this.selections.termsFilter:
+                sortBy = this.selectionsId.termId;
                 break;
-            case this.subjectsFilter:
-                sortBy = 'subjectId';
+            case this.selections.subjectsFilter:
+                sortBy = this.selectionsId.subjectId;
                 break;
 
             default:
@@ -125,7 +135,12 @@ export class SelectPagePage implements OnInit {
         } );
 
         const { role, data } = await loading.onDidDismiss();
-        this.router.navigateByUrl( `/record` );
+        if ( this.selections.viewSubjectResult === this.selectionType ) {
+            this.router.navigateByUrl( `/view-result` );
+        } else {
+            this.router.navigateByUrl( `/record` );
+        }
+
 
     }
 

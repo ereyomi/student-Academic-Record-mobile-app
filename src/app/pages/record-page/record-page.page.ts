@@ -45,7 +45,7 @@ export class RecordPagePage implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.db.getDatabaseState().subscribe( async ready => {
+        /* this.db.getDatabaseState().subscribe( async ready => {
             if ( ready ) {
                 console.log( 'db ready: ', ready );
                 const isDump = await this.db.isDump();
@@ -56,7 +56,8 @@ export class RecordPagePage implements OnInit {
                     this.myInit();
                 }
             }
-        } );
+        } ); */
+        this.myInit();
     }
 
     myInit() {

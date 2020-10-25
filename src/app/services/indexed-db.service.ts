@@ -110,6 +110,7 @@ export class IndexedDbService {
                                 await this.multipleInsert( dumpData );
                                 this.getSessionsTermsAndSubjects();
                                 await this.loadStudents();
+                                await this.loadacademicRecordsData();
                                 this.dbReady.next( true );
                             } catch ( error ) {
 

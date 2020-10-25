@@ -23,9 +23,13 @@ const routes: Routes = [
     },
     {
         path: '',
-        redirectTo: 'home',
+        redirectTo: 'view-result',
         pathMatch: 'full'
     },
+  {
+    path: 'view-result',
+    loadChildren: () => import('./pages/view-result/view-result.module').then( m => m.ViewResultPageModule)
+  },
 
 ];
 

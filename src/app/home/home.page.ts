@@ -16,7 +16,7 @@ export class HomePage implements OnInit {
         this.router.navigateByUrl( `/select/${ routeTo }` );
     }
     ngOnInit() {}
-    async loadSelectForExam() {
+    async loadSelectForExam( routeToOption: string = 'exam') {
         const loading = await this.loadingController.create( {
             spinner: 'crescent',
             // duration: 2000,
@@ -32,7 +32,9 @@ export class HomePage implements OnInit {
                 const isDump = await this.db.isDump();
                 console.log( 'aw', isDump );
                 if ( isDump === true ) {
+                    this.db.loadacademicRecordsData();
                     this.db.getSessionsTermsAndSubjects();
+
                     loading.dismiss();
                 }
             }
@@ -40,7 +42,7 @@ export class HomePage implements OnInit {
 
         const { role, data } = await loading.onDidDismiss();
         console.log( 'Loading dismissed with role:', role, data );
-        this.openDetails( 'exam' );
+        this.openDetails( routeToOption );
 
     }
 }
