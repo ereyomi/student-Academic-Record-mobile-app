@@ -1,35 +1,4 @@
-<ion-header class="ion-no-border">
-    <div class="select-header">
-    
-    
-        <img src="assets/undraw-img/undraw_Analysis_re_w2vd.svg" alt="exam" />
-    
-        <div class="custom-toolbar">
-            <ion-buttons slot="start">
-                <ion-back-button color="primary" text="" defaultHref="/select"></ion-back-button>
-            </ion-buttons>
-    
-            <div class="custom-title-card">
-                <p>RECORD</p>
-                <p>EXAM SCORE</p>
-                <ion-label>
-                    <ion-chip>
-                        2018 / 2019
-                    </ion-chip>
-                    <ion-chip>
-                        First Term
-                    </ion-chip>
-                    <ion-chip>
-                        Math
-                    </ion-chip>
-                </ion-label>
-    
-            </div>
-    
-        </div>
-    
-    </div>
-</ion-header>
+<app-header [appSelection]="appSelection"></app-header>
 
 <ion-content>
     <div class="custom-body" *ngIf="academicReports$ | async as academicReports">

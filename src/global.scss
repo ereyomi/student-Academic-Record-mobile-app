@@ -30,7 +30,7 @@
     /* padding: 10px; */
     position: relative;
     width: 100%;
-    height: 250px;
+    height: 180px;
     overflow: hidden;
     z-index: 1;
     /* border-bottom-left-radius: 30px;
@@ -49,10 +49,11 @@
 .select-header img {
     position: absolute;
     width: 100%;
-    height: 350px;
+    height: 180px;
     object-fit: cover;
     object-position: top right;
     z-index: 2;
+    overflow: hidden;
 }
 .select-header ion-toolbar {
     position: absolute; 

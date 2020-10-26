@@ -14,6 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
 import { ScorePageModule } from './layout/score/score.module';
 import { IndexedDbService } from './services/indexed-db.service';
+import { AppService } from './services/app.service';
 @NgModule( {
     declarations: [ AppComponent ],
     entryComponents: [],
@@ -31,7 +32,8 @@ import { IndexedDbService } from './services/indexed-db.service';
         StatusBar,
         SplashScreen,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-        IndexedDbService
+        IndexedDbService,
+        AppService,
     ],
     bootstrap: [ AppComponent ]
 } )

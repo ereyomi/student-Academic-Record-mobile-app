@@ -7,8 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { RecordPagePageRoutingModule } from './record-page-routing.module';
 
 import { RecordPagePage } from './record-page.page';
-import { ScorePage } from 'src/app/layout/score/score.page';
 import { ScorePageModule } from 'src/app/layout/score/score.module';
+import { HeaderPageModule } from 'src/app/layout/header/header.module';
 
 @NgModule( {
     imports: [
@@ -17,10 +17,10 @@ import { ScorePageModule } from 'src/app/layout/score/score.module';
         IonicModule,
         RecordPagePageRoutingModule,
         ScorePageModule,
+        HeaderPageModule,
     ],
     declarations: [
         RecordPagePage,
-        // ScorePage
     ]
 } )
 export class RecordPagePageModule { }
