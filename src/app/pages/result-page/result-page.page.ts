@@ -4,16 +4,20 @@ import { AppService } from 'src/app/services/app.service';
 import { IndexedDbService } from 'src/app/services/indexed-db.service';
 
 @Component({
-  selector: 'app-view-result',
-  templateUrl: './view-result.page.html',
-  styleUrls: ['./view-result.page.scss'],
+  selector: 'app-result-page',
+  templateUrl: './result-page.page.html',
+  styleUrls: ['./result-page.page.scss'],
 })
-export class ViewResultPage implements OnInit {
-
+export class ResultPagePage implements OnInit {
+  header = {
+    title: 'VIEW',
+    subTitle: 'RESULT'
+  };
   academicReports$: Observable<any> = this.appS.academicRecordsBySelection;
   studentsData$: Observable<any> = this.db.getStudents();
   constructor(private appS: AppService, private db: IndexedDbService) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
 }

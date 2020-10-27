@@ -1,26 +1,8 @@
-<ion-header class="ion-no-border">
-    <div class="select-header">
-        
-        <img src="assets/undraw-img/undraw_Analysis_re_w2vd.svg" alt="exam" />
-
-        <div class="custom-toolbar">
-            <ion-buttons slot="start">
-                <ion-back-button color="primary" text="" defaultHref="/home"></ion-back-button>
-            </ion-buttons>
-            
-            <div class="custom-title-card">
-                <p>RECORD</p>
-                <p>EXAM SCORE</p>
-            </div>
-
-        </div> 
-        
-    </div> 
-</ion-header>
+<app-header [header]="header" [showTitleOptions]="false"></app-header>
 <ion-content>
         <div class="custom-body">
             <form class="custom-sm" [formGroup]="selectionForm">
-                <ion-item lines="none" class="custom-items">
+                <ion-item lines="none" class="custom-items" *ngIf="sessions$ | async as sessions">
                     <ion-label position="stacked">
                         SELECT SESSION
                     </ion-label>
@@ -31,7 +13,7 @@
                         <ion-select-option value="{{session.sessionId}}" *ngFor="let session of sessions">{{ session.name }}</ion-select-option>
                     </ion-select>
                 </ion-item>
-                <ion-item lines="none" class="custom-items">
+                <ion-item lines="none" class="custom-items" *ngIf="terms$ | async as terms">
                     <ion-label position="stacked">
                         SELECT TERM
                     </ion-label>
@@ -39,7 +21,7 @@
                         <ion-select-option value="{{term.termId}}" *ngFor="let term of terms">{{term.name}}</ion-select-option>
                     </ion-select>
                 </ion-item>
-                <ion-item lines="none" class="custom-items">
+                <ion-item lines="none" class="custom-items" *ngIf="subjects$ | async as subjects">
                     <ion-label position="stacked">
                         SELECT SUBJECT
                     </ion-label>

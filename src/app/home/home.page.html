@@ -6,7 +6,7 @@
         <ion-title size="large" color="primary">
             Ereyomi
         </ion-title>
-        <ion-buttons slot="end">
+        <ion-buttons slot="end" *ngIf="showButtons">
             <ion-button color="primary">
                 <ion-icon name="search-outline"></ion-icon>
             </ion-button>
@@ -35,7 +35,7 @@
             <ion-col>
                 <ion-card (click)="loadTo()">
                     <ion-card-header>
-                        <ion-card-title>
+                        <ion-card-title color="tertiary-shade">
                             <ion-icon name="albums"></ion-icon>
                             Record
                         </ion-card-title>
@@ -77,11 +77,26 @@
         </ion-row>
         <ion-row>
             <ion-col>
-                <ion-card>
+                <ion-card disabled="true">
                     <ion-card-header>
                         <ion-card-title color="warning">
                             <ion-icon name="book"></ion-icon>
                             Student 
+                        </ion-card-title>
+                    </ion-card-header>
+                    <ion-card-content>
+                        term cummulative Result
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <ion-card disabled="true">
+                    <ion-card-header>
+                        <ion-card-title color="success">
+                            <ion-icon name="cloud-download-outline"></ion-icon>
+                            Download as PDf
                         </ion-card-title>
                     </ion-card-header>
                     <ion-card-content>

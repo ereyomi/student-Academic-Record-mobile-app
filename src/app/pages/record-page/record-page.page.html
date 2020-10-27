@@ -1,4 +1,4 @@
-<app-header [appSelection]="appSelection"></app-header>
+<app-header [header]="header"></app-header>
 
 <ion-content>
     <div class="custom-body" *ngIf="academicReports$ | async as academicReports">
@@ -7,7 +7,7 @@
         </form>
     </div>
     <ion-fab vertical="bottom" horizontal="end" edge slot="fixed">
-        <ion-fab-button>
+        <ion-fab-button (click)="goBackHome()">
             <ion-icon name="checkmark-done-circle-outline"></ion-icon>
         </ion-fab-button>
     </ion-fab>

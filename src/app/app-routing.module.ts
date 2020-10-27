@@ -18,21 +18,13 @@ const routes: Routes = [
         loadChildren: () => import('./pages/record-page/record-page.module').then(m => m.RecordPagePageModule)
     },
     {
-        path: 'score',
-        loadChildren: () => import('./layout/score/score.module').then(m => m.ScorePageModule)
-    },
-    {
         path: '',
         redirectTo: 'home',
         pathMatch: 'full'
     },
     {
-        path: 'view-result',
-        loadChildren: () => import('./pages/view-result/view-result.module').then(m => m.ViewResultPageModule)
-    },
-    {
-        path: 'header',
-        loadChildren: () => import('./layout/header/header.module').then(m => m.HeaderPageModule)
+        path: 'result',
+        loadChildren: () => import('./pages/result-page/result-page.module').then(m => m.ResultPagePageModule)
     },
 
 ];

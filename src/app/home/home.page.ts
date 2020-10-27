@@ -11,6 +11,7 @@ import { AppService } from '../services/app.service';
     styleUrls: [ 'home.page.scss' ],
 } )
 export class HomePage implements OnInit {
+    showButtons = false;
     schoolSessions: any;
     constructor(
         private router: Router,

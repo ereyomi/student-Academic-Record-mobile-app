@@ -30,7 +30,7 @@
     /* padding: 10px; */
     position: relative;
     width: 100%;
-    height: 180px;
+    height: 155px;
     overflow: hidden;
     z-index: 1;
     /* border-bottom-left-radius: 30px;
@@ -49,7 +49,7 @@
 .select-header img {
     position: absolute;
     width: 100%;
-    height: 180px;
+    height: 155px;
     object-fit: cover;
     object-position: top right;
     z-index: 2;
@@ -78,15 +78,18 @@
     box-shadow: none;
     text-align: left;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    padding: 10px;
+    padding: 0 10px;
 }
 .select-header .custom-title-card p {
     padding: 0;
     margin: 0;
 }
 .select-header .custom-title-card p:first-child {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: bold;
+}
+.select-header .custom-title-card p:last-child {
+    font-size: 0.8rem;
 }
 .select-header ion-card ion-card-title {
     color: black;

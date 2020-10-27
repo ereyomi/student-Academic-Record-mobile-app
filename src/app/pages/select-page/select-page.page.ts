@@ -5,14 +5,18 @@ import { IndexedDbService } from 'src/app/services/indexed-db.service';
 import { AppService } from 'src/app/services/app.service';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Selections } from 'src/app/models/selections';
+import { Observable } from 'rxjs';
 
-@Component( {
+@Component({
     selector: 'app-select-page',
     templateUrl: './select-page.page.html',
-    styleUrls: [ './select-page.page.scss' ],
-} )
+    styleUrls: ['./select-page.page.scss'],
+})
 export class SelectPagePage implements OnInit {
-
+    header = {
+        title: 'SELECT',
+        subTitle: '',
+    };
     selections = {
         sessionsFilter: 'sessions',
         termsFilter: 'terms',
@@ -26,11 +30,11 @@ export class SelectPagePage implements OnInit {
     };
     selectionForm: FormGroup;
 
-    sessions: any[];
+    sessions$: Observable<any> = this.appS.sessions;
 
-    terms: any[];
+    terms$: Observable<any> = this.appS.terms;
 
-    subjects: any[];
+    subjects$: Observable<any> = this.appS.subjects;
 
     selectionType: string;
 
@@ -49,65 +53,29 @@ export class SelectPagePage implements OnInit {
         this.route.data.subscribe(
             resolve => {
                 const { data } = resolve;
-                const { selections, type } = data;
-                this.selectionType = type;
-                if ( typeof selections === 'undefined' || typeof selections === null || selections.length === 0 ) {
-                    this.navCtrl.navigateBack( 'home' );
-                } else {
-                    this.sessions = this.filterResolvedData( selections, this.selections.sessionsFilter );
-                    this.terms = this.filterResolvedData( selections, this.selections.termsFilter );
-                    this.subjects = this.filterResolvedData( selections, this.selections.subjectsFilter );
-                }
-
+                this.selectionType = data.type;
             },
             err => {
-                this.navCtrl.navigateBack( 'home' );
+                this.navCtrl.navigateBack('home');
             }
         );
     }
     initForm() {
-        this.selectionForm = this.fb.group( {
-            sessionId: [ '', [ Validators.required ] ],
-            termId: [ '', [ Validators.required ] ],
-            subjectId: [ '', [ Validators.required ] ],
-        } );
+        this.selectionForm = this.fb.group({
+            sessionId: ['', [Validators.required]],
+            termId: ['', [Validators.required]],
+            subjectId: ['', [Validators.required]],
+        });
     }
-    filterResolvedData( selections: any[], filter: any ) {
-
-        const dataToFind = selections.find(
-            ( dat: { id: any; } ) => dat.id === filter
-        );
-        let sortBy = '';
-        switch ( filter ) {
-            case this.selections.sessionsFilter:
-                sortBy = this.selectionsId.sessionId;
-                break;
-            case this.selections.termsFilter:
-                sortBy = this.selectionsId.termId;
-                break;
-            case this.selections.subjectsFilter:
-                sortBy = this.selectionsId.subjectId;
-                break;
-
-            default:
-                break;
-        }
-        if ( Object.entries( dataToFind ).length !== 0 ) {
-            return dataToFind.data.sort(
-                ( a: any, b: any ) => a[ sortBy ] - b[ sortBy ]
-            );
-        }
-    }
-
     async loadSelection() {
 
-        const loading = await this.loadingController.create( {
+        const loading = await this.loadingController.create({
             spinner: 'crescent',
             // duration: 2000,
             message: 'Please wait...',
             translucent: true,
             cssClass: 'custom-class custom-loading'
-        } );
+        });
         await loading.present();
 
         // push selection to appService
@@ -115,28 +83,30 @@ export class SelectPagePage implements OnInit {
             type: this.selectionType,
             ...this.selectionForm.value
         };
-        this.db.getDatabaseState().subscribe( async ready => {
-            if ( ready ) {
+        this.db.getDatabaseState().subscribe(async ready => {
+            if (ready) {
                 const isDump = await this.db.isDump();
-                if ( isDump === true ) {
+                if (isDump === true) {
                     // load students data
                     try {
                         await this.db.loadStudents();
+                        /* this is for viewing that selection result */
                         await this.appS.loadAcademicRecordsBySelection(appServiceData);
+                        /*  */
                         this.appS.selectOptions.next(appServiceData);
-                    } catch ( error ) {
+                    } catch (error) {
 
                     }
                     loading.dismiss();
                 }
             }
-        } );
+        });
 
         const { role, data } = await loading.onDidDismiss();
-        if ( this.selections.viewSubjectResult === this.selectionType ) {
-            this.router.navigateByUrl( `/view-result` );
+        if (this.selections.viewSubjectResult === this.selectionType) {
+            this.router.navigateByUrl(`/result`);
         } else {
-            this.router.navigateByUrl( `/record` );
+            this.router.navigateByUrl(`/record`);
         }
 
 

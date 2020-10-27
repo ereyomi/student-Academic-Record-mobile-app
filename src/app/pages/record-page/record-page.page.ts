@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { AppService } from 'src/app/services/app.service';
 import { NavController } from '@ionic/angular';
 import { IndexedDbService } from 'src/app/services/indexed-db.service';
-import { Selections } from 'src/app/models/selections';
 import { Observable } from 'rxjs';
 
 @Component( {
@@ -13,9 +12,18 @@ import { Observable } from 'rxjs';
 export class RecordPagePage implements OnInit {
 
     academicReports$: Observable<any> = this.appS.academicRecordsBySelection;
+    sessions$: Observable<any> = this.appS.sessions;
+
+    terms$: Observable<any> = this.appS.terms;
+
+    subjects$: Observable<any> = this.appS.subjects;
     notAvailable = 0;
     appSelection: any;
     students: any[];
+    header: { title: string; subTitle: string; } = {
+        title: 'RECORD',
+        subTitle: '',
+    };
     /* students = [
         {
             address: 'Ereyomi has no address',
@@ -73,6 +81,7 @@ export class RecordPagePage implements OnInit {
                 this.db.getStudents().subscribe( students => {
                     if ( students.length !== 0 ) {
                         this.students = students;
+                        this.getHeader();
                     } else {
                         this.goBackHome();
                     }
@@ -82,6 +91,18 @@ export class RecordPagePage implements OnInit {
     }
     goBackHome() {
         this.navCtrl.navigateBack( 'home' );
+    }
+    getHeader() {
+        switch (this.appSelection.type) {
+            case 'exam':
+                this.header.subTitle = 'EXAM SCORE';
+                break;
+            case 'ca':
+                this.header.subTitle = 'CA SCORE';
+                break;
+            default:
+                break;
+        }
     }
 
 }

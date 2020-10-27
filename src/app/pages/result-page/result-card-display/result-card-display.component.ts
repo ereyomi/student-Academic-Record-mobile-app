@@ -2,11 +2,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Students } from 'src/app/models/students';
 
 @Component({
-  selector: 'app-view',
-  templateUrl: './view.page.html',
-  styleUrls: ['./view.page.scss'],
+  selector: 'app-result-card-display',
+  templateUrl: './result-card-display.component.html',
+  styleUrls: ['./result-card-display.component.scss'],
 })
-export class ViewPage implements OnInit {
+export class ResultCardDisplayComponent implements OnInit {
+
   @Input() academicRecord: any;
   @Input() studentsData: any;
 

@@ -195,7 +195,6 @@ export class IndexedDbService {
                 })
             )
                 .then(dataa => {
-                    console.log(dataa);
                     this.selection.next(dataa);
                 });
         };

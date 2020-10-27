@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { SelectPagePageRoutingModule } from './select-page-routing.module';
 
 import { SelectPagePage } from './select-page.page';
+import { HeaderPageModule } from 'src/app/layout/header/header.module';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { SelectPagePage } from './select-page.page';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    SelectPagePageRoutingModule
+    SelectPagePageRoutingModule,
+    HeaderPageModule,
   ],
   declarations: [SelectPagePage]
 })

@@ -36,6 +36,15 @@ export class AppService {
     getSelctionOptions(): Observable<{}> {
         return this.selectOptions.asObservable();
     }
+    getSortedSessions(): Observable<any> {
+        return this.sessions.asObservable();
+    }
+    getSortedTerms(): Observable<any> {
+        return this.terms.asObservable();
+    }
+    getSortedSubjects(): Observable<any> {
+        return this.subjects.asObservable();
+    }
     goBackHome() {
         this.navCtrl.navigateBack('home');
     }
@@ -121,23 +130,30 @@ export class AppService {
 
     sortSelectionsData(passedData: any) {
         let sortBy = '';
+        let sortedData: any;
+        let storeTo: BehaviorSubject<any>;
         switch (passedData.id) {
             case this.selectionsFilters.sessionsFilter:
                 sortBy = this.selectionsId.sessionId;
+                storeTo = this.sessions;
                 break;
             case this.selectionsFilters.termsFilter:
                 sortBy = this.selectionsId.termId;
+                storeTo = this.terms;
                 break;
             case this.selectionsFilters.subjectsFilter:
                 sortBy = this.selectionsId.subjectId;
+                storeTo = this.subjects;
                 break;
 
             default:
                 break;
         }
         if (Object.entries(passedData).length !== 0) {
-           return this.appSort(passedData.data, sortBy);
+            sortedData = this.appSort(passedData.data, sortBy);
         }
+        storeTo.next(sortedData);
+        return sortedData;
     }
     appSort(passedData: any, sortBy: string) {
         if (Object.entries(passedData).length !== 0) {
@@ -149,15 +165,12 @@ export class AppService {
     async properlySortSelections() {
         this.db.getSelection().subscribe(
             data => {
-                console.log('data: ', data);
                 const sortedData = data.map((dat: any) => {
-                    console.log(dat.id, dat);
                     return {
                         id: dat.id,
                         data: this.sortSelectionsData(dat),
                     };
                 });
-                console.log(...sortedData);
                 this.sortedSelections.next(sortedData);
             }
         );

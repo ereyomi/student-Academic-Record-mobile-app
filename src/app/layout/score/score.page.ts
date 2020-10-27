@@ -38,7 +38,6 @@ export class ScorePage implements OnInit {
             } else {
                 this.score = this.typeData.caScore;
             }
-            console.log('score: ', this.score);
         } catch (error) { }
     }
     onInputIt(event: any): void {
@@ -52,7 +51,6 @@ export class ScorePage implements OnInit {
             userId: this.student?.userId ?? 0,
             ...this.scoreProcessing(this.selection.type, score),
         };
-        console.log('score processing...', score, payload);
         this.appS.processAcademicScore(payload);
     }
 
@@ -107,7 +105,6 @@ export class ScorePage implements OnInit {
                 this.typeData.caScore = checkIfRecordExist.caScore;
             }
         }
-        console.log('this.typeData: ', this.typeData, checkIfRecordExist);
     }
 
 }

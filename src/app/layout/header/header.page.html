@@ -9,18 +9,18 @@
         <ion-back-button color="primary" text="" defaultHref="/select"></ion-back-button>
       </ion-buttons>
 
-      <div class="custom-title-card">
-        <p>RECORD</p>
-        <p>EXAM SCORE</p>
-        <ion-label>
-          <ion-chip>
-            2018 / 2019
+      <div class="custom-title-card" *ngIf="appSelection">
+        <p>{{ header.title }}</p>
+        <p>{{ header.subTitle }}</p>
+        <ion-label *ngIf="showTitleOptions">
+          <ion-chip class="customer-ionchip">
+            {{ getSession() }}
           </ion-chip>
-          <ion-chip>
-            First Term
+          <ion-chip class="customer-ionchip">
+            {{ getTerm() }}
           </ion-chip>
-          <ion-chip>
-            Math
+          <ion-chip class="customer-ionchip">
+            {{ getSubject() }}
           </ion-chip>
         </ion-label>
 

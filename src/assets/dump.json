@@ -57,18 +57,21 @@
             {
                 "subjectId": 1,
                 "name": "MATHEMATICS 1",
+                "shortName": "MATH",
                 "grade": "JSS1",
                 "term": "FIRST TERM"
             },
             {
                 "subjectId": 2,
                 "name": "ENGLISH LANGUAGE 1",
+                "shortName": "ENG",
                 "grade": "JSS1",
                 "term": "FIRST TERM"
             },
             {
                 "subjectId": 3,
                 "name": "BASIC SCIENCE 1",
+                "shortName": "BASIC SCI",
                 "grade": "JSS1",
                 "term": "FIRST TERM"
             }
